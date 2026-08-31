@@ -10,7 +10,14 @@ import {
   renderProjects,
   renderSkills,
 } from "./render.js";
-import { initNav, initReveal, initScrollEffects, initScrollSpy, initTyping } from "./ui.js";
+import {
+  initCounters,
+  initNav,
+  initReveal,
+  initScrollEffects,
+  initScrollSpy,
+  initTyping,
+} from "./ui.js";
 
 async function init() {
   initScrollEffects();
@@ -35,6 +42,7 @@ async function init() {
 
   initReveal();
   initScrollSpy();
+  initCounters();
 }
 
 init();

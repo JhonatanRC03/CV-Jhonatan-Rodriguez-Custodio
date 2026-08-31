@@ -26,7 +26,9 @@ export function renderHero(profile) {
   const stats = $("#hero-stats");
   profile.stats.forEach(({ value, label }) => {
     const card = el("div", "stat");
-    card.append(el("div", "stat-value", value), el("div", "stat-label", label));
+    const number = el("div", "stat-value", value);
+    number.dataset.count = value;
+    card.append(number, el("div", "stat-label", label));
     stats.append(card);
   });
 }

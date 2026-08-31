@@ -6,6 +6,7 @@ const history = [];
 let remaining = null;
 let limit = null;
 let busy = false;
+let asked = false;
 
 const win = () => $("#chat-window");
 
@@ -97,7 +98,7 @@ function renderSuggestions() {
   const box = $("#chat-suggestions");
   box.replaceChildren();
 
-  if (remaining === 0 || history.length > 0) return;
+  if (asked || remaining === 0) return;
 
   CHAT_SUGGESTIONS.forEach((text) => {
     const btn = el("button", "suggestion", text);
@@ -111,6 +112,7 @@ async function ask(question) {
   if (busy || remaining === 0) return;
 
   busy = true;
+  asked = true;
   syncInputState();
   pushMessage(question, "user");
   renderSuggestions();

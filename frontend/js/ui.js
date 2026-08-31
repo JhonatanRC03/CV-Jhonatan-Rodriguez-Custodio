@@ -75,6 +75,52 @@ export function initReveal() {
   $$(".reveal").forEach((node) => observer.observe(node));
 }
 
+/* ── Conteo ascendente de las estadísticas del hero ── */
+const COUNTER_DURATION = 1600;
+
+function countUp(node) {
+  // Separa el número de adornos como "+" o "3+" para animar solo la cifra.
+  const match = node.dataset.count.match(/^(\D*)(\d+)(.*)$/);
+
+  if (!match) return;
+
+  const [, prefix, digits, suffix] = match;
+  const target = Number(digits);
+  let start;
+
+  const step = (now) => {
+    start ??= now;
+    const progress = Math.min((now - start) / COUNTER_DURATION, 1);
+    const eased = 1 - (1 - progress) ** 3;
+
+    node.textContent = `${prefix}${Math.round(target * eased)}${suffix}`;
+
+    if (progress < 1) requestAnimationFrame(step);
+  };
+
+  node.textContent = `${prefix}0${suffix}`;
+  requestAnimationFrame(step);
+}
+
+export function initCounters() {
+  const nodes = $$("[data-count]");
+
+  if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+
+  const observer = new IntersectionObserver(
+    (entries, obs) => {
+      entries.forEach((entry) => {
+        if (!entry.isIntersecting) return;
+        countUp(entry.target);
+        obs.unobserve(entry.target);
+      });
+    },
+    { threshold: 0.6 }
+  );
+
+  nodes.forEach((node) => observer.observe(node));
+}
+
 /* ── Efecto máquina de escribir en el hero ── */
 export function initTyping() {
   const target = $("#typed-role");
