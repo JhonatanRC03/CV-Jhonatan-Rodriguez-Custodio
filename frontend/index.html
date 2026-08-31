@@ -3,10 +3,209 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Mi Sitio</title>
-    <link rel="stylesheet" href="css/styles.css" />
+    <meta
+      name="description"
+      content="Jhonatan Rodriguez Custodio — AI Engineer especializado en sistemas RAG multimodales, arquitecturas multiagente y soluciones de IA generativa sobre Microsoft Azure."
+    />
+    <title>Jhonatan Rodriguez Custodio | AI Engineer</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap"
+      rel="stylesheet"
+    />
+
+    <link rel="stylesheet" href="css/base.css" />
+    <link rel="stylesheet" href="css/layout.css" />
+    <link rel="stylesheet" href="css/components.css" />
+    <link rel="stylesheet" href="css/responsive.css" />
   </head>
+
   <body>
-    <script src="js/main.js"></script>
+    <div class="scroll-progress" id="scroll-progress"></div>
+    <div class="bg-grid" aria-hidden="true"></div>
+    <div class="bg-glow" aria-hidden="true"></div>
+
+    <!-- ══════════ HEADER ══════════ -->
+    <header id="header">
+      <div class="container">
+        <nav>
+          <a href="#hero" class="logo">JRC<span>.</span></a>
+
+          <ul class="nav-links" id="nav-links">
+            <li><a href="#about" class="nav-link"><em>01.</em> Sobre mí</a></li>
+            <li><a href="#experience" class="nav-link"><em>02.</em> Experiencia</a></li>
+            <li><a href="#projects" class="nav-link"><em>03.</em> Proyectos</a></li>
+            <li><a href="#skills" class="nav-link"><em>04.</em> Stack</a></li>
+            <li><a href="#certifications" class="nav-link"><em>05.</em> Certificaciones</a></li>
+            <li><a href="#contact" class="nav-cta">Contacto</a></li>
+          </ul>
+
+          <button class="nav-toggle" id="nav-toggle" aria-label="Abrir menú" aria-expanded="false">
+            <span></span><span></span><span></span>
+          </button>
+        </nav>
+      </div>
+    </header>
+
+    <main>
+      <!-- ══════════ HERO ══════════ -->
+      <section id="hero" class="hero">
+        <div class="container hero-inner">
+          <div class="hero-content">
+            <span class="hero-greeting">&lt;/&gt; Hola, mi nombre es</span>
+            <h1 class="hero-name">Jhonatan Rodriguez Custodio.</h1>
+            <h2 class="hero-role">
+              <span id="typed-role"></span><span class="caret" aria-hidden="true"></span>
+            </h2>
+            <p class="hero-summary" id="hero-summary"></p>
+
+            <div class="hero-actions">
+              <a href="#projects" class="btn btn-primary">Ver proyectos</a>
+              <a href="#contact" class="btn btn-ghost">Hablemos</a>
+            </div>
+
+            <ul class="hero-social" id="hero-social"></ul>
+          </div>
+
+          <div class="hero-visual">
+            <div class="avatar-frame">
+              <span class="avatar-fallback" aria-hidden="true">JRC</span>
+              <img
+                src="assets/img/profile.jpg"
+                alt="Jhonatan Rodriguez Custodio"
+                onerror="this.remove()"
+              />
+              <div class="avatar-ring" aria-hidden="true"></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="hero-stats container" id="hero-stats"></div>
+      </section>
+
+      <!-- ══════════ SOBRE MÍ ══════════ -->
+      <section id="about" class="section reveal">
+        <div class="container">
+          <h2 class="section-title"><em>01.</em> Sobre mí</h2>
+          <div class="about-grid">
+            <div class="about-text" id="about-text"></div>
+            <aside class="about-side">
+              <h3 class="side-title">Formación</h3>
+              <ul class="education-list" id="education-list"></ul>
+
+              <h3 class="side-title">Mentoría y talleres</h3>
+              <ul class="mentoring-list" id="mentoring-list"></ul>
+            </aside>
+          </div>
+        </div>
+      </section>
+
+      <!-- ══════════ EXPERIENCIA ══════════ -->
+      <section id="experience" class="section reveal">
+        <div class="container">
+          <h2 class="section-title"><em>02.</em> Experiencia profesional</h2>
+          <div class="timeline" id="timeline"></div>
+        </div>
+      </section>
+
+      <!-- ══════════ PROYECTOS ══════════ -->
+      <section id="projects" class="section reveal">
+        <div class="container">
+          <h2 class="section-title"><em>03.</em> Proyectos destacados</h2>
+          <div class="filter-bar" id="project-filters"></div>
+          <div class="cards-grid" id="projects-grid"></div>
+        </div>
+      </section>
+
+      <!-- ══════════ STACK ══════════ -->
+      <section id="skills" class="section reveal">
+        <div class="container">
+          <h2 class="section-title"><em>04.</em> Stack tecnológico</h2>
+          <div class="skills-grid" id="skills-grid"></div>
+        </div>
+      </section>
+
+      <!-- ══════════ CERTIFICACIONES ══════════ -->
+      <section id="certifications" class="section reveal">
+        <div class="container">
+          <h2 class="section-title"><em>05.</em> Certificaciones Microsoft</h2>
+          <div class="certs-grid" id="certs-grid"></div>
+        </div>
+      </section>
+
+      <!-- ══════════ CONTACTO ══════════ -->
+      <section id="contact" class="section section-contact reveal">
+        <div class="container contact-inner">
+          <h2 class="section-title centered"><em>06.</em> Trabajemos juntos</h2>
+          <p class="contact-lead">
+            ¿Tienes un reto de IA generativa, RAG o automatización documental?
+            Escríbeme y conversemos sobre cómo llevarlo a producción.
+          </p>
+
+          <form id="contact-form" class="contact-form" novalidate>
+            <div class="field-row">
+              <div class="field">
+                <label for="name">Nombre</label>
+                <input type="text" id="name" name="name" required autocomplete="name" />
+              </div>
+              <div class="field">
+                <label for="email">Email</label>
+                <input type="email" id="email" name="email" required autocomplete="email" />
+              </div>
+            </div>
+            <div class="field">
+              <label for="message">Mensaje</label>
+              <textarea id="message" name="message" rows="5" required></textarea>
+            </div>
+            <button type="submit" class="btn btn-primary btn-block">Enviar mensaje</button>
+            <p class="form-status" id="form-status" role="status"></p>
+          </form>
+
+          <ul class="contact-direct" id="contact-direct"></ul>
+        </div>
+      </section>
+    </main>
+
+    <footer>
+      <div class="container footer-inner">
+        <p>Diseñado y construido por Jhonatan Rodriguez Custodio</p>
+        <p class="footer-stack">Flask · JavaScript · CSS</p>
+      </div>
+    </footer>
+
+    <!-- ══════════ CHAT WIDGET ══════════ -->
+    <button class="chat-launcher" id="chat-launcher" aria-label="Abrir asistente">
+      <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M21 11.5a8.4 8.4 0 0 1-9 8.4 8.5 8.5 0 0 1-3.9-.9L3 21l1.9-5.1A8.4 8.4 0 0 1 12 3a8.4 8.4 0 0 1 9 8.5z" />
+      </svg>
+    </button>
+
+    <div class="chat-widget" id="chat-widget" hidden>
+      <div class="chat-header">
+        <span class="status-dot" aria-hidden="true"></span>
+        <div class="chat-title">
+          <strong>Jhonatan AI Assistant</strong>
+          <small>Responde con base en su perfil</small>
+        </div>
+        <button class="chat-close" id="chat-close" aria-label="Cerrar asistente">&times;</button>
+      </div>
+
+      <div class="chat-window" id="chat-window"></div>
+
+      <div class="chat-suggestions" id="chat-suggestions"></div>
+
+      <form class="chat-input" id="chat-form">
+        <input type="text" id="chat-message" placeholder="Hazme una pregunta..." autocomplete="off" />
+        <button type="submit" aria-label="Enviar">
+          <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M22 2 11 13M22 2l-7 20-4-9-9-4 20-7z" />
+          </svg>
+        </button>
+      </form>
+    </div>
+
+    <script type="module" src="js/main.js"></script>
   </body>
 </html>
