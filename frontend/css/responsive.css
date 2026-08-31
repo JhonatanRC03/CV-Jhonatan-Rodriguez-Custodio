@@ -107,9 +107,24 @@
     max-height: 82vh;
   }
 
-  .chat-launcher {
+  .chat-launcher-wrap {
     right: 18px;
     bottom: 18px;
+  }
+
+  .chat-invite {
+    max-width: 190px;
+    padding: 12px 14px;
+  }
+
+  .chat-launcher-btn {
+    width: 60px;
+    height: 60px;
+  }
+
+  .chat-launcher-btn img {
+    width: 36px;
+    height: 36px;
   }
 }
 

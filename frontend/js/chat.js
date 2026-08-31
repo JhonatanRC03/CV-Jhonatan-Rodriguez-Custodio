@@ -4,6 +4,7 @@ import { $, el } from "./utils.js";
 
 const history = [];
 let remaining = null;
+let limit = null;
 let busy = false;
 
 const win = () => $("#chat-window");
@@ -74,16 +75,22 @@ function renderQuota() {
   const badge = $("#chat-quota");
   if (remaining === null) return;
 
-  badge.textContent = `${remaining} ${remaining === 1 ? "pregunta" : "preguntas"}`;
+  badge.textContent = limit ? `${remaining}/${limit}` : String(remaining);
+  badge.title = `${remaining} ${remaining === 1 ? "pregunta restante" : "preguntas restantes"}`;
   badge.classList.toggle("depleted", remaining === 0);
 }
 
-function setLocked(locked) {
-  $("#chat-message").disabled = locked;
-  $("#chat-form").querySelector("button").disabled = locked;
-  $("#chat-message").placeholder = locked
-    ? "Límite alcanzado — vuelve en 24 h"
-    : "Hazme una pregunta...";
+/** El campo se bloquea mientras responde el modelo y también al agotarse la cuota. */
+function syncInputState() {
+  const depleted = remaining === 0;
+  const input = $("#chat-message");
+
+  input.disabled = busy || depleted;
+  $("#chat-form").querySelector("button").disabled = busy || depleted;
+
+  if (depleted) input.placeholder = "Límite alcanzado — vuelve en 24 h";
+  else if (busy) input.placeholder = "Generando respuesta...";
+  else input.placeholder = "Hazme una pregunta...";
 }
 
 function renderSuggestions() {
@@ -104,7 +111,7 @@ async function ask(question) {
   if (busy || remaining === 0) return;
 
   busy = true;
-  setLocked(true);
+  syncInputState();
   pushMessage(question, "user");
   renderSuggestions();
 
@@ -155,13 +162,15 @@ async function ask(question) {
   } finally {
     busy = false;
     renderQuota();
-    setLocked(remaining === 0);
+    renderSuggestions();
+    syncInputState();
     if (remaining !== 0) $("#chat-message").focus();
   }
 }
 
 export function initChat() {
   const launcher = $("#chat-launcher");
+  const invite = $("#chat-invite");
   const widget = $("#chat-widget");
   const form = $("#chat-form");
   const input = $("#chat-message");
@@ -172,23 +181,33 @@ export function initChat() {
   getChatQuota()
     .then((quota) => {
       remaining = quota.remaining;
+      limit = quota.limit;
       $("#chat-model").textContent = quota.model;
       renderQuota();
       renderSuggestions();
-      setLocked(remaining === 0);
+      syncInputState();
     })
     .catch(() => {});
 
-  launcher.addEventListener("click", () => {
+  const open = () => {
     widget.hidden = false;
     launcher.classList.add("hidden");
     input.focus();
     scrollToEnd();
+  };
+
+  $("#chat-launcher-btn").addEventListener("click", open);
+  invite.addEventListener("click", open);
+
+  $("#chat-invite-close").addEventListener("click", (e) => {
+    e.stopPropagation();
+    invite.classList.add("dismissed");
   });
 
   $("#chat-close").addEventListener("click", () => {
     widget.hidden = true;
     launcher.classList.remove("hidden");
+    invite.classList.add("dismissed");
   });
 
   form.addEventListener("submit", (e) => {
