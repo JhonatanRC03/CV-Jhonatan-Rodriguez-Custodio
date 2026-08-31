@@ -1,6 +1,5 @@
 import { getCV } from "./api.js";
 import { initChat } from "./chat.js";
-import { initContactForm } from "./contact.js";
 import {
   renderAbout,
   renderCertifications,
@@ -23,7 +22,6 @@ async function init() {
   initScrollEffects();
   initNav();
   initTyping();
-  initContactForm();
   initChat();
 
   try {

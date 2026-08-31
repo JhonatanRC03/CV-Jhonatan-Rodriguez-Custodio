@@ -75,14 +75,19 @@
     align-items: stretch;
   }
 
-  .field-row {
-    grid-template-columns: 1fr;
-  }
-
   .cards-grid,
   .skills-grid,
   .certs-grid {
     grid-template-columns: 1fr;
+  }
+
+  .contact-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 14px;
+  }
+
+  .contact-card {
+    padding: 24px 14px;
   }
 
   .timeline {
@@ -133,9 +138,7 @@
     grid-template-columns: 1fr;
   }
 
-  .contact-direct {
-    flex-direction: column;
-    align-items: center;
-    gap: 12px;
+  .contact-grid {
+    grid-template-columns: 1fr;
   }
 }

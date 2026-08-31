@@ -1,23 +1,59 @@
+import { icon } from "./icons.js";
 import { $, el, withLeadEmphasis } from "./utils.js";
+
+/** Canales de contacto derivados del perfil. */
+function contactChannels(profile) {
+  return [
+    {
+      key: "mail",
+      label: "Email",
+      value: profile.email,
+      href: `mailto:${profile.email}`,
+      hint: "Escríbeme un correo",
+    },
+    {
+      key: "whatsapp",
+      label: "WhatsApp",
+      value: profile.phone,
+      href: `https://wa.me/${profile.whatsapp}`,
+      hint: "Respuesta rápida por chat",
+      external: true,
+    },
+    {
+      key: "linkedin",
+      label: "LinkedIn",
+      value: "/in/jrc03",
+      href: profile.linkedin,
+      hint: "Conectemos profesionalmente",
+      external: true,
+    },
+    {
+      key: "github",
+      label: "GitHub",
+      value: "@JhonatanRC03",
+      href: profile.github,
+      hint: "Revisa mi código",
+      external: true,
+    },
+  ];
+}
 
 /* ── Hero ── */
 export function renderHero(profile) {
   $("#hero-summary").textContent = profile.summary;
 
   const social = $("#hero-social");
-  const links = [
-    { label: "LinkedIn ↗", href: profile.linkedin, external: true },
-    { label: profile.email, href: `mailto:${profile.email}` },
-    { label: profile.phone, href: `tel:${profile.phone.replace(/[^\d+]/g, "")}` },
-  ];
-
-  links.forEach(({ label, href, external }) => {
-    const a = el("a", null, label);
+  contactChannels(profile).forEach(({ key, label, href, external }) => {
+    const a = el("a");
     a.href = href;
+    a.title = label;
+    a.setAttribute("aria-label", label);
     if (external) {
       a.target = "_blank";
       a.rel = "noopener noreferrer";
     }
+    a.append(icon(key, 20));
+
     const li = el("li");
     li.append(a);
     social.append(li);
@@ -163,24 +199,27 @@ export function renderCertifications(certifications) {
   });
 }
 
-/* ── Contacto directo ── */
+/* ── Contacto ── */
 export function renderContactLinks(profile) {
-  const list = $("#contact-direct");
-  const entries = [
-    { label: profile.email, href: `mailto:${profile.email}` },
-    { label: profile.phone, href: `tel:${profile.phone.replace(/[^\d+]/g, "")}` },
-    { label: "LinkedIn", href: profile.linkedin, external: true },
-  ];
+  const grid = $("#contact-grid");
 
-  entries.forEach(({ label, href, external }) => {
-    const a = el("a", null, label);
-    a.href = href;
+  contactChannels(profile).forEach(({ key, label, value, href, hint, external }) => {
+    const card = el("a", `card contact-card contact-${key}`);
+    card.href = href;
     if (external) {
-      a.target = "_blank";
-      a.rel = "noopener noreferrer";
+      card.target = "_blank";
+      card.rel = "noopener noreferrer";
     }
-    const li = el("li");
-    li.append(a);
-    list.append(li);
+
+    const badge = el("span", "contact-icon");
+    badge.append(icon(key, 24));
+
+    card.append(
+      badge,
+      el("h3", null, label),
+      el("span", "contact-value", value),
+      el("span", "contact-hint", hint)
+    );
+    grid.append(card);
   });
 }

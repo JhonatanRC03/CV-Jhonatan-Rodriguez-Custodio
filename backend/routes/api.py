@@ -129,13 +129,3 @@ def chat():
         mimetype="text/event-stream",
         headers={"Cache-Control": "no-cache", "X-Accel-Buffering": "no"},
     )
-
-
-@api.post("/contact")
-def contact():
-    payload = request.get_json(silent=True) or {}
-    missing = [f for f in ("name", "email", "message") if not str(payload.get(f, "")).strip()]
-    if missing:
-        return jsonify({"error": "Campos requeridos", "fields": missing}), 400
-
-    return jsonify({"message": "Mensaje recibido. Gracias por escribir."}), 201

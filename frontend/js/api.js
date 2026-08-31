@@ -58,6 +58,3 @@ export async function streamChat(message, history, on) {
     }
   }
 }
-
-export const sendContact = (payload) =>
-  request("/contact", { method: "POST", body: JSON.stringify(payload) });

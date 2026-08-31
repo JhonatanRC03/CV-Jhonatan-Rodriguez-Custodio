@@ -468,87 +468,67 @@
   color: var(--text-dim);
 }
 
-/* ── Formulario ── */
-.contact-form {
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
-}
-
-.field-row {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 20px;
-}
-
-.field {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-}
-
-.field label {
-  font-family: var(--font-mono);
-  font-size: 0.78rem;
-  color: var(--text-dim);
-  text-transform: uppercase;
-  letter-spacing: 0.1em;
-}
-
-.field input,
-.field textarea {
-  background: var(--bg-card);
-  border: 1px solid var(--border);
-  border-radius: var(--radius-sm);
-  padding: 13px 16px;
-  color: var(--text);
-  outline: none;
-  transition: var(--transition);
-  resize: vertical;
-}
-
-.field input:focus,
-.field textarea:focus {
-  border-color: var(--accent);
-  box-shadow: 0 0 0 3px rgba(0, 242, 254, 0.08);
-}
-
-.field input.invalid,
-.field textarea.invalid {
-  border-color: #ef4444;
-}
-
-.form-status {
-  font-family: var(--font-mono);
-  font-size: 0.85rem;
+/* ── Tarjetas de contacto ── */
+.contact-card {
+  align-items: center;
   text-align: center;
-  min-height: 1.4em;
+  gap: 4px;
+  padding: 32px 14px;
+  color: inherit;
 }
 
-.form-status.success {
-  color: #10b981;
-}
-
-.form-status.error {
-  color: #ef4444;
-}
-
-.contact-direct {
-  display: flex;
-  justify-content: center;
-  gap: 28px;
-  flex-wrap: wrap;
-  margin-top: 44px;
-  font-family: var(--font-mono);
-  font-size: 0.87rem;
-}
-
-.contact-direct a {
-  color: var(--text-muted);
-}
-
-.contact-direct a:hover {
+.contact-icon {
+  display: grid;
+  place-items: center;
+  width: 52px;
+  height: 52px;
+  margin-bottom: 14px;
+  border-radius: 50%;
   color: var(--accent);
+  background: rgba(0, 242, 254, 0.08);
+  border: 1px solid var(--border);
+  transition: var(--transition);
+}
+
+.contact-card:hover .contact-icon {
+  color: #04121c;
+  background: var(--gradient);
+  border-color: transparent;
+  transform: scale(1.08);
+}
+
+.contact-card h3 {
+  font-size: 1.05rem;
+  margin-bottom: 2px;
+}
+
+.contact-value {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  letter-spacing: -0.02em;
+  color: var(--accent);
+  overflow-wrap: anywhere;
+}
+
+.contact-hint {
+  font-size: 0.82rem;
+  color: var(--text-dim);
+  margin-top: 6px;
+}
+
+/* Verde de marca para el canal de WhatsApp */
+.contact-whatsapp .contact-icon {
+  color: #25d366;
+  background: rgba(37, 211, 102, 0.1);
+}
+
+.contact-whatsapp:hover .contact-icon {
+  background: #25d366;
+  color: #04121c;
+}
+
+.contact-whatsapp .contact-value {
+  color: #25d366;
 }
 
 /* ═══════════════════════════════════════

@@ -8,7 +8,9 @@
     "location": "Perú",
     "email": "jhonatan9494c@gmail.com",
     "phone": "(+51) 968677769",
+    "whatsapp": "51968677769",
     "linkedin": "https://www.linkedin.com/in/jrc03/",
+    "github": "https://github.com/JhonatanRC03",
     "photo": "assets/img/profile.jpg",
     "stats": [
       { "value": "3+", "label": "Años en IA aplicada" },

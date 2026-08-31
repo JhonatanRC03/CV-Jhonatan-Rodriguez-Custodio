@@ -244,18 +244,25 @@ header nav {
 
 .hero-social {
   display: flex;
-  gap: 22px;
+  gap: 14px;
 }
 
 .hero-social a {
-  color: var(--text-dim);
-  font-family: var(--font-mono);
-  font-size: 0.85rem;
+  display: grid;
+  place-items: center;
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  color: var(--text-muted);
+  border: 1px solid var(--border);
+  background: var(--bg-card);
 }
 
 .hero-social a:hover {
   color: var(--accent);
-  transform: translateY(-2px);
+  border-color: var(--border-hover);
+  transform: translateY(-3px);
+  box-shadow: 0 0 18px var(--glow);
 }
 
 /* ── Stats del hero ── */
@@ -322,13 +329,21 @@ header nav {
 }
 
 .contact-inner {
-  max-width: 720px;
+  max-width: 920px;
 }
 
 .contact-lead {
   text-align: center;
   color: var(--text-muted);
   margin-bottom: 44px;
+  max-width: 620px;
+  margin-inline: auto;
+}
+
+.contact-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 20px;
 }
 
 /* ── Footer ── */
