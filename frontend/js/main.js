@@ -1,5 +1,6 @@
 import { getCV } from "./api.js";
 import { initChat } from "./chat.js";
+import { initProjectModal } from "./components/project-modal.js";
 import {
   renderAbout,
   renderCertifications,
@@ -22,6 +23,7 @@ async function init() {
   initScrollEffects();
   initNav();
   initTyping();
+  initProjectModal();
   initChat();
 
   try {

@@ -1,4 +1,5 @@
 import { icon } from "./icons.js";
+import { openProject } from "./components/project-modal.js";
 import { $, el, withLeadEmphasis } from "./utils.js";
 
 /** Canales de contacto derivados del perfil. */
@@ -136,16 +137,43 @@ export function renderProjects(projects) {
     projects
       .filter((p) => category === "Todos" || p.category === category)
       .forEach((project) => {
-        const card = el("article", "card");
+        const card = el("article", "card project-card");
+        card.tabIndex = 0;
+        card.setAttribute("role", "button");
+        card.setAttribute("aria-label", `Ver detalle de ${project.title}`);
+
+        const head = el("div", "project-head");
+        head.append(el("span", "project-category", project.category));
+        if (project.status === "En desarrollo") {
+          head.append(el("span", "modal-status wip", project.status));
+        }
+
+        // El resto del stack se muestra en el modal.
         const tech = el("ul", "tech-list");
-        project.tech.forEach((t) => tech.append(el("li", null, t)));
+        project.tech.slice(0, 4).forEach((t) => tech.append(el("li", null, t)));
+        if (project.tech.length > 4) {
+          tech.append(el("li", "tech-more", `+${project.tech.length - 4}`));
+        }
+
+        const cue = el("span", "project-cue", "Ver arquitectura y detalle →");
 
         card.append(
-          el("span", "project-category", project.category),
+          head,
           el("h3", null, project.title),
           el("p", null, project.description),
-          tech
+          tech,
+          cue
         );
+
+        const open = () => openProject(project);
+        card.addEventListener("click", open);
+        card.addEventListener("keydown", (e) => {
+          if (e.key === "Enter" || e.key === " ") {
+            e.preventDefault();
+            open();
+          }
+        });
+
         grid.append(card);
       });
   };

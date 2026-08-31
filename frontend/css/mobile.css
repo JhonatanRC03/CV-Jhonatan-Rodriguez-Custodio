@@ -126,7 +126,75 @@
 }
 
 /* ═══════════════════════════════════════
-   3. ASISTENTE — LANZADOR
+   4. MODAL DE PROYECTO — HOJA COMPLETA
+   En móvil ocupa toda la pantalla: el
+   diagrama necesita cada píxel disponible.
+   ═══════════════════════════════════════ */
+
+@media (max-width: 640px) {
+  .modal-overlay {
+    padding: 0;
+    place-items: end stretch;
+  }
+
+  .modal {
+    width: 100%;
+    max-height: 94dvh;
+    border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+    border-left: none;
+    border-right: none;
+    border-bottom: none;
+    padding-bottom: var(--safe-bottom);
+  }
+
+  .modal-body {
+    padding: 22px 18px 32px;
+  }
+
+  .modal-close {
+    top: 10px;
+    margin-right: 12px;
+    width: var(--tap);
+    height: var(--tap);
+  }
+
+  .modal-lead {
+    font-size: 0.94rem;
+    padding-bottom: 20px;
+  }
+
+  .modal-section {
+    margin-top: 28px;
+  }
+
+  /* El flujo pasa a una sola columna para no comprimir el texto */
+  .flow-list {
+    grid-template-columns: 1fr;
+  }
+
+  /* La tabla de servicios se apila: nombre arriba, rol debajo */
+  .component-list li {
+    grid-template-columns: 1fr;
+    gap: 3px;
+    padding: 12px 15px;
+  }
+
+  .diagram {
+    padding: 14px 12px;
+  }
+
+  .diagram-nodes {
+    grid-template-columns: 1fr;
+    gap: 8px;
+  }
+
+  .diagram-layer-inner {
+    padding: 12px 12px 14px;
+  }
+}
+
+/* ═══════════════════════════════════════
+   5. ASISTENTE — LANZADOR
    ═══════════════════════════════════════ */
 
 @media (max-width: 640px) {
@@ -281,7 +349,63 @@
 }
 
 /* ═══════════════════════════════════════
-   5. OBJETIVOS TÁCTILES
+   5. MODAL COMO HOJA A PANTALLA COMPLETA
+   ═══════════════════════════════════════ */
+
+@media (max-width: 640px) {
+  .modal-overlay {
+    padding: 0;
+    align-items: flex-end;
+  }
+
+  .modal {
+    width: 100%;
+    max-height: 92dvh;
+    border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+    border-left: none;
+    border-right: none;
+    border-bottom: none;
+  }
+
+  .modal-body {
+    padding: 26px 20px calc(32px + var(--safe-bottom));
+  }
+
+  .modal-close {
+    width: var(--tap);
+    height: var(--tap);
+    margin: 10px 10px 0 0;
+  }
+
+  .modal-title {
+    font-size: 1.32rem;
+  }
+
+  .modal-lead {
+    font-size: 0.94rem;
+  }
+
+  .modal-section {
+    margin-top: 26px;
+  }
+
+  /* Etiqueta sobre descripción: en columnas se aprieta demasiado */
+  .component-list li {
+    grid-template-columns: 1fr;
+    gap: 3px;
+  }
+
+  .modal-links {
+    flex-direction: column;
+  }
+
+  .modal-links .btn {
+    width: 100%;
+  }
+}
+
+/* ═══════════════════════════════════════
+   6. OBJETIVOS TÁCTILES
    ═══════════════════════════════════════ */
 
 @media (max-width: 640px) {
@@ -312,7 +436,7 @@
 }
 
 /* ═══════════════════════════════════════
-   6. LANDSCAPE EN MÓVIL
+   7. LANDSCAPE EN MÓVIL
    Pantallas muy bajas: el hero no debe forzar
    una altura completa que oculte el contenido.
    ═══════════════════════════════════════ */

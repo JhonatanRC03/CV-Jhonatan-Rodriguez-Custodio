@@ -19,7 +19,17 @@
 
     <link rel="stylesheet" href="css/base.css" />
     <link rel="stylesheet" href="css/layout.css" />
-    <link rel="stylesheet" href="css/components.css" />
+
+    <!-- Componentes: un archivo por responsabilidad -->
+    <link rel="stylesheet" href="css/components/ui.css" />
+    <link rel="stylesheet" href="css/components/cards.css" />
+    <link rel="stylesheet" href="css/components/timeline.css" />
+    <link rel="stylesheet" href="css/components/contact.css" />
+    <link rel="stylesheet" href="css/components/modal.css" />
+    <link rel="stylesheet" href="css/components/diagram.css" />
+    <link rel="stylesheet" href="css/components/chat.css" />
+
+    <!-- Adaptaciones: siempre al final para ganar la cascada -->
     <link rel="stylesheet" href="css/responsive.css" />
     <link rel="stylesheet" href="css/mobile.css" />
   </head>
@@ -159,6 +169,21 @@
         <p class="footer-stack">Flask · JavaScript · CSS</p>
       </div>
     </footer>
+
+    <!-- ══════════ MODAL DE PROYECTO ══════════ -->
+    <div
+      class="modal-overlay"
+      id="project-modal"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="modal-title"
+      hidden
+    >
+      <div class="modal" role="document">
+        <button class="modal-close" id="modal-close" aria-label="Cerrar detalle">&times;</button>
+        <div class="modal-body" id="modal-body"></div>
+      </div>
+    </div>
 
     <!-- ══════════ CHAT WIDGET ══════════ -->
     <div class="chat-launcher-wrap" id="chat-launcher">

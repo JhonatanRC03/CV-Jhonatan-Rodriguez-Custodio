@@ -1,0 +1,71 @@
+/* ── Tarjetas de canales de contacto ── */
+/* ── Tarjetas de contacto ── */
+.contact-card {
+  align-items: center;
+  text-align: center;
+  gap: 4px;
+  padding: 32px 14px;
+  color: inherit;
+}
+
+.contact-body {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.contact-icon {
+  display: grid;
+  place-items: center;
+  width: 52px;
+  height: 52px;
+  margin-bottom: 14px;
+  border-radius: 50%;
+  color: var(--accent);
+  background: rgba(0, 242, 254, 0.08);
+  border: 1px solid var(--border);
+  transition: var(--transition);
+}
+
+.contact-card:hover .contact-icon {
+  color: #04121c;
+  background: var(--gradient);
+  border-color: transparent;
+  transform: scale(1.08);
+}
+
+.contact-card h3 {
+  font-size: 1.05rem;
+  margin-bottom: 2px;
+}
+
+.contact-value {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  letter-spacing: -0.02em;
+  color: var(--accent);
+  overflow-wrap: anywhere;
+}
+
+.contact-hint {
+  font-size: 0.82rem;
+  color: var(--text-dim);
+  margin-top: 6px;
+}
+
+/* Verde de marca para el canal de WhatsApp */
+.contact-whatsapp .contact-icon {
+  color: #25d366;
+  background: rgba(37, 211, 102, 0.1);
+}
+
+.contact-whatsapp:hover .contact-icon {
+  background: #25d366;
+  color: #04121c;
+}
+
+.contact-whatsapp .contact-value {
+  color: #25d366;
+}
+
