@@ -176,6 +176,8 @@ header nav {
 /* ── Hero ── */
 .hero {
   min-height: 100vh;
+  /* dvh evita el salto por la barra de direcciones en iOS/Android. */
+  min-height: 100dvh;
   display: flex;
   flex-direction: column;
   justify-content: center;

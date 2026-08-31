@@ -2,7 +2,8 @@
 <html lang="es">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <meta name="theme-color" content="#070b14" />
     <meta
       name="description"
       content="Jhonatan Rodriguez Custodio — AI Engineer especializado en sistemas RAG multimodales, arquitecturas multiagente y soluciones de IA generativa sobre Microsoft Azure."
@@ -20,6 +21,7 @@
     <link rel="stylesheet" href="css/layout.css" />
     <link rel="stylesheet" href="css/components.css" />
     <link rel="stylesheet" href="css/responsive.css" />
+    <link rel="stylesheet" href="css/mobile.css" />
   </head>
 
   <body>
@@ -42,12 +44,14 @@
             <li><a href="#contact" class="nav-cta">Contacto</a></li>
           </ul>
 
-          <button class="nav-toggle" id="nav-toggle" aria-label="Abrir menú" aria-expanded="false">
+          <button class="nav-toggle" id="nav-toggle" aria-label="Abrir menú" aria-expanded="false" aria-controls="nav-links">
             <span></span><span></span><span></span>
           </button>
         </nav>
       </div>
     </header>
+
+    <div class="nav-backdrop" id="nav-backdrop" hidden></div>
 
     <main>
       <!-- ══════════ HERO ══════════ -->
@@ -174,6 +178,7 @@
     </div>
 
     <div class="chat-widget" id="chat-widget" hidden>
+      <span class="chat-grabber" aria-hidden="true"></span>
       <div class="chat-header">
         <span class="chat-avatar">
           <img src="assets/img/chatbot.png" alt="" aria-hidden="true" />
@@ -182,7 +187,8 @@
         <div class="chat-title">
           <strong>Asistente de Jhonatan</strong>
           <small>
-            <span class="model-badge" id="chat-model">gpt-5</span> · Azure AI Foundry
+            <span class="model-badge" id="chat-model">gpt-5</span>
+            <span class="provider">· Azure AI Foundry</span>
           </small>
         </div>
         <span class="chat-quota" id="chat-quota" title="Preguntas restantes"></span>

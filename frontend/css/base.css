@@ -40,6 +40,15 @@
 
   --header-h: 76px;
   --max-w: 1180px;
+
+  /* Muescas y barras del sistema en móviles (viewport-fit=cover) */
+  --safe-top: env(safe-area-inset-top, 0px);
+  --safe-bottom: env(safe-area-inset-bottom, 0px);
+  --safe-left: env(safe-area-inset-left, 0px);
+  --safe-right: env(safe-area-inset-right, 0px);
+
+  /* Mínimo recomendado para objetivos táctiles (WCAG 2.5.5) */
+  --tap: 44px;
 }
 
 *,
@@ -62,6 +71,13 @@ body {
   line-height: 1.7;
   -webkit-font-smoothing: antialiased;
   overflow-x: hidden;
+  -webkit-tap-highlight-color: transparent;
+  overscroll-behavior-y: none;
+}
+
+/* Congela el fondo mientras hay un panel superpuesto abierto. */
+body.no-scroll {
+  overflow: hidden;
 }
 
 h1,

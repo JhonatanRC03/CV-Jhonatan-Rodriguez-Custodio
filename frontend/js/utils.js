@@ -22,3 +22,14 @@ export function withLeadEmphasis(text) {
 
   return fragment;
 }
+
+export const isMobile = () => window.matchMedia("(max-width: 640px)").matches;
+
+/* Varios paneles pueden pedir el bloqueo a la vez (menú y chat),
+   así que se cuentan las peticiones y solo se libera en la última. */
+const scrollLocks = new Set();
+
+export function lockScroll(owner, locked) {
+  locked ? scrollLocks.add(owner) : scrollLocks.delete(owner);
+  document.body.classList.toggle("no-scroll", scrollLocks.size > 0);
+}

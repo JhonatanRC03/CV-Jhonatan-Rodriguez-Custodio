@@ -1,6 +1,6 @@
 import { getChatQuota, streamChat } from "./api.js";
 import { CHAT_GREETING, CHAT_HISTORY_TURNS, CHAT_SUGGESTIONS } from "./config.js";
-import { $, el } from "./utils.js";
+import { $, el, isMobile, lockScroll } from "./utils.js";
 
 const history = [];
 let remaining = null;
@@ -194,8 +194,18 @@ export function initChat() {
   const open = () => {
     widget.hidden = false;
     launcher.classList.add("hidden");
-    input.focus();
-    scrollToEnd();
+    // Como hoja inferior ocupa la pantalla: el fondo no debe desplazarse.
+    lockScroll("chat", isMobile());
+    // En móvil, enfocar abre el teclado y tapa la conversación.
+    if (!isMobile()) input.focus();
+    scrollToEnd(true);
+  };
+
+  const close = () => {
+    widget.hidden = true;
+    launcher.classList.remove("hidden");
+    invite.classList.add("dismissed");
+    lockScroll("chat", false);
   };
 
   $("#chat-launcher-btn").addEventListener("click", open);
@@ -206,10 +216,15 @@ export function initChat() {
     invite.classList.add("dismissed");
   });
 
-  $("#chat-close").addEventListener("click", () => {
-    widget.hidden = true;
-    launcher.classList.remove("hidden");
-    invite.classList.add("dismissed");
+  $("#chat-close").addEventListener("click", close);
+
+  document.addEventListener("keydown", (e) => {
+    if (e.key === "Escape" && !widget.hidden) close();
+  });
+
+  // Al rotar o cambiar de tamaño, el bloqueo solo aplica en modo hoja.
+  window.addEventListener("resize", () => {
+    if (!widget.hidden) lockScroll("chat", isMobile());
   });
 
   form.addEventListener("submit", (e) => {

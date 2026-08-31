@@ -1,5 +1,5 @@
 import { TYPED_ROLES } from "./config.js";
-import { $, $$ } from "./utils.js";
+import { $, $$, lockScroll } from "./utils.js";
 
 /* ── Header con fondo al hacer scroll + barra de progreso ── */
 export function initScrollEffects() {
@@ -20,20 +20,44 @@ export function initScrollEffects() {
 export function initNav() {
   const toggle = $("#nav-toggle");
   const links = $("#nav-links");
+  const backdrop = $("#nav-backdrop");
 
-  const close = () => {
-    toggle.setAttribute("aria-expanded", "false");
-    links.classList.remove("open");
+  const isOpen = () => toggle.getAttribute("aria-expanded") === "true";
+
+  const setOpen = (open) => {
+    toggle.setAttribute("aria-expanded", String(open));
+    toggle.setAttribute("aria-label", open ? "Cerrar menú" : "Abrir menú");
+    links.classList.toggle("open", open);
+    lockScroll("nav", open);
+
+    if (open) {
+      backdrop.hidden = false;
+      requestAnimationFrame(() => backdrop.classList.add("visible"));
+    } else {
+      backdrop.classList.remove("visible");
+      setTimeout(() => {
+        if (!isOpen()) backdrop.hidden = true;
+      }, 350);
+    }
   };
 
-  toggle.addEventListener("click", () => {
-    const open = toggle.getAttribute("aria-expanded") === "true";
-    toggle.setAttribute("aria-expanded", String(!open));
-    links.classList.toggle("open", !open);
-  });
+  toggle.addEventListener("click", () => setOpen(!isOpen()));
+  backdrop.addEventListener("click", () => setOpen(false));
 
   links.addEventListener("click", (e) => {
-    if (e.target.tagName === "A") close();
+    if (e.target.closest("a")) setOpen(false);
+  });
+
+  document.addEventListener("keydown", (e) => {
+    if (e.key === "Escape" && isOpen()) {
+      setOpen(false);
+      toggle.focus();
+    }
+  });
+
+  // Al pasar a escritorio el drawer deja de existir: hay que liberar el scroll.
+  window.matchMedia("(min-width: 861px)").addEventListener("change", (e) => {
+    if (e.matches && isOpen()) setOpen(false);
   });
 }
 

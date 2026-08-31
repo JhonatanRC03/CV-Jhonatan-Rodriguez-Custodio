@@ -214,12 +214,14 @@ export function renderContactLinks(profile) {
     const badge = el("span", "contact-icon");
     badge.append(icon(key, 24));
 
-    card.append(
-      badge,
+    const body = el("span", "contact-body");
+    body.append(
       el("h3", null, label),
       el("span", "contact-value", value),
       el("span", "contact-hint", hint)
     );
+
+    card.append(badge, body);
     grid.append(card);
   });
 }
