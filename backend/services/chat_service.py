@@ -6,7 +6,7 @@ import logging
 from openai import OpenAI
 
 from config import Config
-from services.cv_service import load_cv
+from services.cv_service import load_cv_brief
 
 log = logging.getLogger(__name__)
 
@@ -54,7 +54,7 @@ def _get_client():
 
 
 def _system_prompt():
-    cv = json.dumps(load_cv(), ensure_ascii=False)
+    cv = json.dumps(load_cv_brief(), ensure_ascii=False)
     return SYSTEM_PROMPT.format(cv=cv)
 
 
