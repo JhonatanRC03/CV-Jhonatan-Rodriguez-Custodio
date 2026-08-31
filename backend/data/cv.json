@@ -1,0 +1,226 @@
+{
+  "profile": {
+    "name": "Jhonatan Rodriguez Custodio",
+    "role": "AI Engineer | Azure & Generative AI",
+    "tagline": "Diseño sistemas RAG multimodales y arquitecturas multiagente en producción.",
+    "summary": "Ingeniero de Sistemas especializado en Inteligencia Artificial, con 3 años de experiencia desarrollando soluciones de IA end-to-end en entornos cloud. Experto en el diseño, implementación y despliegue de aplicaciones basadas en modelos de lenguaje (LLMs), sistemas RAG multimodales, MCP y arquitecturas multiagente.",
+    "summaryExtended": "Cuento con sólida experiencia en desarrollo de software orientado a IA: construcción de pipelines de datos, integración de modelos de OpenAI, diseño de APIs y despliegue en producción bajo arquitecturas escalables. Desarrollo soluciones inteligentes que automatizan procesos complejos mediante la integración de LLMs con datos empresariales y la orquestación de agentes, mejorando la toma de decisiones y la eficiencia operativa.",
+    "location": "Perú",
+    "email": "jhonatan9494c@gmail.com",
+    "phone": "(+51) 968677769",
+    "linkedin": "https://www.linkedin.com/in/jrc03/",
+    "photo": "assets/img/profile.jpg",
+    "stats": [
+      { "value": "3+", "label": "Años en IA aplicada" },
+      { "value": "6", "label": "Certificaciones Microsoft" },
+      { "value": "10+", "label": "Sistemas en producción" },
+      { "value": "3", "label": "Hackatones como mentor" }
+    ]
+  },
+
+  "experience": [
+    {
+      "company": "Gestión de Sistemas",
+      "location": "Perú",
+      "role": "AI Engineer",
+      "period": "Ene 2025 – Actualidad",
+      "current": true,
+      "highlights": [
+        "MEF — Chatbot RAG multimodal (GyS AVI) para consulta documental institucional: búsqueda híbrida y semantic ranker sobre Azure AI Search, respuestas con citas trazables al documento fuente (Azure OpenAI + GPT-4 Vision), extracción con Document Intelligence y portal propio con autenticación JWT sobre Cosmos DB.",
+        "BCP — Sistema de reclutamiento con IA aplicando Document Intelligence, Azure AI Search y modelos de OpenAI para automatizar el análisis de CVs y mejorar la eficiencia en la selección de candidatos.",
+        "Risk Agents — Sistema multiagente de riesgo crediticio sobre Azure AI Foundry: un orquestador reparte la evaluación entre agentes de historial, entorno macro/sectorial (web search grounding) y ratios financieros (herramientas OpenAPI), consolidando informe con calificación y recomendación.",
+        "Sistema documentario inteligente serverless (Azure Functions + Document Intelligence + Azure OpenAI) para extracción de atributos en contratos, fichas RUC, DNI, pagarés y documentos SPLAFT/tributarios, con sincronización SFTP y validación de firmas.",
+        "Asistente de análisis de poderes legales con pipeline documento a documento para identificar apoderados, facultades, montos límite y vigencia, generando resúmenes descargables para equipos legales.",
+        "Document Knowledge — Plataforma de gestión del conocimiento empresarial sobre AKS, orquestación vía Semantic Kernel, indexación semántica y arquitectura desacoplada entre ingesta batch y servicio conversacional de baja latencia.",
+        "Sistema multiagente de disputas bancarias: seis agentes secuenciales (Azure AI Foundry Agent Framework) que automatizan intake, caso 360°, evidencia, investigación normativa, comunicación y resolución, con Human-in-the-Loop obligatorio antes de contracargos.",
+        "Agente analista de fraude transaccional que pondera evidencia de comportamiento del cliente y emite dictamen de riesgo sustentado factor por factor.",
+        "Consultoría en analítica geoespacial y valorización de terrenos con IA usando ArcGIS y Databricks."
+      ]
+    },
+    {
+      "company": "Shintek",
+      "location": "España",
+      "role": "Data Science and Analytics JR",
+      "period": "Jul 2024 – Dic 2024",
+      "current": false,
+      "highlights": [
+        "Mejora del 20% en precisión y eficiencia de detección de objetos aplicando YOLO y transfer learning sobre imágenes y video.",
+        "Visualizaciones interactivas y dashboards con Seaborn y Matplotlib para interpretación de datos y seguimiento de KPIs clave.",
+        "Análisis exploratorio y preparación de datos para modelos predictivos."
+      ]
+    }
+  ],
+
+  "projects": [
+    {
+      "title": "GyS AVI — RAG Multimodal (MEF)",
+      "category": "RAG / GenAI",
+      "description": "Chatbot institucional con búsqueda híbrida, semantic ranker y respuestas con citas trazables al documento fuente.",
+      "tech": ["Azure AI Search", "Azure OpenAI", "GPT-4 Vision", "Document Intelligence", "Cosmos DB", "JWT"]
+    },
+    {
+      "title": "Risk Agents — Riesgo Crediticio",
+      "category": "Multiagente",
+      "description": "Orquestador que distribuye la evaluación entre agentes de historial, macroentorno y ratios financieros para emitir una calificación consolidada.",
+      "tech": ["Azure AI Foundry", "Agent Service", "OpenAPI Tools", "Web Grounding"]
+    },
+    {
+      "title": "Disputas Bancarias — 6 Agentes",
+      "category": "Multiagente",
+      "description": "Pipeline secuencial de agentes con Human-in-the-Loop obligatorio antes de ejecutar acciones irreversibles como contracargos.",
+      "tech": ["Agent Framework", "RAG de políticas", "HITL", "Python"]
+    },
+    {
+      "title": "Document Knowledge Platform",
+      "category": "Arquitectura",
+      "description": "Gestión del conocimiento empresarial sobre Kubernetes con ingesta batch desacoplada del servicio conversacional.",
+      "tech": ["AKS", "Semantic Kernel", "Azure AI Search", "FastAPI"]
+    },
+    {
+      "title": "Reclutamiento IA (BCP)",
+      "category": "Procesamiento Documental",
+      "description": "Automatización del análisis de CVs con extracción estructurada y ranking semántico de candidatos.",
+      "tech": ["Document Intelligence", "Azure AI Search", "Azure OpenAI"]
+    },
+    {
+      "title": "Extracción Documental Serverless",
+      "category": "Procesamiento Documental",
+      "description": "Extracción de atributos clave en contratos, RUC, DNI y pagarés con sincronización SFTP y validación de firmas.",
+      "tech": ["Azure Functions", "Document Intelligence", "Azure OpenAI", "Computer Vision"]
+    }
+  ],
+
+  "skills": [
+    {
+      "category": "Lenguajes de Programación",
+      "icon": "code",
+      "items": ["Python", "SQL", "R", "Java", "JavaScript / TypeScript"]
+    },
+    {
+      "category": "IA Agéntica y Orquestación",
+      "icon": "agents",
+      "items": ["Model Context Protocol (MCP)", "Microsoft Agent Framework", "Semantic Kernel", "Azure AI Foundry", "Arquitecturas multiagente", "Human-in-the-Loop"]
+    },
+    {
+      "category": "IA Generativa y NLP",
+      "icon": "ai",
+      "items": ["RAG híbrido + semantic ranking", "Azure OpenAI (GPT-4, embeddings)", "OpenAI APIs", "Prompt engineering", "NLP"]
+    },
+    {
+      "category": "Frameworks y Desarrollo",
+      "icon": "stack",
+      "items": ["FastAPI", "Flask", "Quart", "React", "Angular"]
+    },
+    {
+      "category": "Visión por Computadora",
+      "icon": "vision",
+      "items": ["YOLOv8", "OpenCV", "TensorFlow", "Keras"]
+    },
+    {
+      "category": "Procesamiento Documental",
+      "icon": "doc",
+      "items": ["Azure AI Document Intelligence", "Content Understanding", "GPT Vision"]
+    },
+    {
+      "category": "Cloud Computing (Azure)",
+      "icon": "cloud",
+      "items": ["Azure AI Foundry", "Azure AI Search", "App Service", "Azure Functions", "Container Apps", "AKS", "Logic Apps", "Key Vault", "Application Insights"]
+    },
+    {
+      "category": "Datos y Visualización",
+      "icon": "data",
+      "items": ["Pandas", "NumPy", "Scikit-learn", "PySpark", "Power BI", "Matplotlib", "Seaborn", "ETL"]
+    },
+    {
+      "category": "Bases de Datos",
+      "icon": "db",
+      "items": ["MySQL", "SQL Server", "MongoDB", "PostgreSQL", "Cosmos DB"]
+    },
+    {
+      "category": "Control de Versiones",
+      "icon": "git",
+      "items": ["Git", "GitHub"]
+    }
+  ],
+
+  "certifications": [
+    {
+      "code": "AI-102",
+      "name": "Designing and Implementing a Microsoft Azure AI Solution",
+      "level": "Associate",
+      "period": "Mar 2025 – Jul 2025",
+      "url": "https://learn.microsoft.com/api/credentials/share/es-es/JhonatanRodriguezCustodio-7265/8AA0D450EA13F82D?sharingId=741F47D64D5A545A"
+    },
+    {
+      "code": "DP-100",
+      "name": "Designing and Implementing a Data Science Solution on Azure",
+      "level": "Associate",
+      "period": "Ene 2026 – Mar 2026",
+      "url": "https://learn.microsoft.com/api/credentials/share/es-es/JhonatanRodriguezCustodio-7265/1658F7EFBA648D3E?sharingId=741F47D64D5A545A"
+    },
+    {
+      "code": "AB-731",
+      "name": "AI Transformation Leader",
+      "level": "Professional",
+      "period": "Jun 2026 – Jul 2026",
+      "url": "https://learn.microsoft.com/api/credentials/share/es-es/JhonatanRodriguezCustodio-7265/96D3C54F9F20FAE5?sharingId=741F47D64D5A545A"
+    },
+    {
+      "code": "AB-730",
+      "name": "AI Business Professional",
+      "level": "Professional",
+      "period": "May 2026 – Jun 2026",
+      "url": "https://learn.microsoft.com/api/credentials/share/es-es/JhonatanRodriguezCustodio-7265/BA8640C8A29E6650?sharingId=741F47D64D5A545A"
+    },
+    {
+      "code": "AI-900",
+      "name": "Microsoft Azure AI Fundamentals",
+      "level": "Fundamentals",
+      "period": "Oct 2024 – Feb 2025",
+      "url": "https://learn.microsoft.com/api/credentials/share/es-es/JhonatanRodriguezCustodio-7265/4298E8369C4AE17A?sharingId=741F47D64D5A545A"
+    },
+    {
+      "code": "DP-900",
+      "name": "Microsoft Azure Data Fundamentals",
+      "level": "Fundamentals",
+      "period": "Mar 2026 – Abr 2026",
+      "url": "https://learn.microsoft.com/api/credentials/share/es-es/JhonatanRodriguezCustodio-7265/E334CB8251A8D2B8?sharingId=741F47D64D5A545A"
+    }
+  ],
+
+  "education": [
+    {
+      "institution": "Universidad Nacional Pedro Ruiz Gallo",
+      "degree": "Bachiller en Ingeniería de Sistemas",
+      "period": "Jul 2019 – Sept 2024"
+    },
+    {
+      "institution": "Academia Alura Latam (Brasil)",
+      "degree": "Certificación en Data Science",
+      "period": "Ene 2023 – Ene 2024"
+    },
+    {
+      "institution": "Bootcamp Experience",
+      "degree": "Data Analysis",
+      "period": "Ene 2024 – Jun 2024"
+    }
+  ],
+
+  "mentoring": [
+    {
+      "title": "Mentor — GenAI Hackathon Interbank",
+      "date": "Noviembre 2025",
+      "description": "Asesoría técnica a equipos en el diseño de soluciones con agentes y arquitecturas RAG."
+    },
+    {
+      "title": "Mentor — Hackatón Bago (Azure AI Foundry)",
+      "date": "Junio 2026",
+      "description": "Acompañamiento en la implementación de soluciones de IA generativa sobre servicios cloud de Azure."
+    },
+    {
+      "title": "Taller Azure AI Foundry — Habitat",
+      "date": "Agosto 2026",
+      "description": "Capacitación sobre RAG, agentes, tools y flujo de trabajo en Azure AI Foundry."
+    }
+  ]
+}
