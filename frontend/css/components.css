@@ -637,6 +637,32 @@
   color: var(--text-dim);
 }
 
+.model-badge {
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  color: var(--accent);
+  background: rgba(0, 242, 254, 0.1);
+  border: 1px solid rgba(0, 242, 254, 0.28);
+  padding: 1px 7px;
+  border-radius: 5px;
+}
+
+.chat-quota {
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  color: var(--text-dim);
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  padding: 3px 9px;
+  white-space: nowrap;
+}
+
+.chat-quota.depleted {
+  color: #f59e0b;
+  border-color: rgba(245, 158, 11, 0.35);
+  background: rgba(245, 158, 11, 0.1);
+}
+
 .status-dot {
   width: 8px;
   height: 8px;
@@ -701,6 +727,51 @@
   font-weight: 500;
   align-self: flex-end;
   border-bottom-right-radius: 4px;
+}
+
+/* ── Respuesta en streaming ── */
+.msg-body {
+  white-space: pre-wrap;
+}
+
+.msg-caret {
+  display: inline-block;
+  width: 7px;
+  height: 0.95em;
+  margin-left: 3px;
+  vertical-align: text-bottom;
+  background: var(--accent);
+  border-radius: 1px;
+  animation: blink 1s step-end infinite;
+}
+
+.msg.streaming {
+  border-color: var(--border-hover);
+  box-shadow: 0 0 18px rgba(0, 242, 254, 0.06);
+}
+
+/* ── Métricas bajo la respuesta ── */
+.msg-meta {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-top: 10px;
+  padding-top: 9px;
+  border-top: 1px solid var(--border);
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  color: var(--text-dim);
+  animation: msgIn 0.3s var(--ease);
+}
+
+.msg-meta > span + span::before {
+  content: "·";
+  margin-right: 10px;
+}
+
+.meta-model {
+  color: var(--accent);
 }
 
 .msg-typing {
@@ -782,6 +853,12 @@
 
 .chat-input input::placeholder {
   color: var(--text-dim);
+}
+
+.chat-input input:disabled,
+.chat-input button:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
 }
 
 .chat-input button {

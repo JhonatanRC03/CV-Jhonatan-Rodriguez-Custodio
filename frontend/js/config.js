@@ -14,4 +14,7 @@ export const CHAT_SUGGESTIONS = [
 ];
 
 export const CHAT_GREETING =
-  "¡Hola! Soy el asistente virtual de Jhonatan, basado en su perfil profesional. ¿Qué te gustaría saber?";
+  "¡Hola! Soy el asistente de Jhonatan y conozco su CV completo. Pregúntame lo que quieras sobre su experiencia, proyectos o certificaciones.";
+
+/** Turnos previos que se envían al modelo para dar continuidad a la conversación. */
+export const CHAT_HISTORY_TURNS = 6;
