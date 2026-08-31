@@ -1,0 +1,70 @@
+{
+  "id": "procesador-documentario",
+  "title": "Procesador Documentario",
+  "category": "Procesamiento Documental",
+  "status": "Producción",
+  "region": "East US 2",
+  "description": "Acelerador serverless que automatiza ingesta, validación y extracción sobre expedientes documentales, con sincronización desde SFTP y validación de firmas.",
+  "problem": "El procesamiento de expedientes es una carga irregular: picos de lotes grandes seguidos de inactividad. Mantener la lógica en Functions hace que el consumo siga al volumen real en lugar de a un plan dimensionado para el pico.",
+  "tech": ["Azure Functions", "Azure App Service", "Document Intelligence", "Azure OpenAI", "Logic Apps", "Blob Storage"],
+
+  "architecture": {
+    "caption": "Cuatro capas: entrada, frontend y cómputo sin servidor, procesamiento con IA y orquestación, y almacenamiento con seguridad.",
+    "layers": [
+      {
+        "name": "Entrada",
+        "nodes": [
+          { "name": "Operador", "detail": "Carga lotes y revisa resultados", "kind": "user" },
+          { "name": "Servidor SFTP", "detail": "Expedientes y ficheros de configuración", "kind": "external" }
+        ]
+      },
+      {
+        "name": "Frontend y cómputo sin servidor",
+        "nodes": [
+          { "name": "Azure App Service", "detail": "Frontend Vite · solo interfaz", "kind": "compute" },
+          { "name": "Azure Functions", "detail": "Python v4 · 8 endpoints HTTP", "kind": "compute" }
+        ]
+      },
+      {
+        "name": "Procesamiento con IA y orquestación",
+        "nodes": [
+          { "name": "Document Intelligence", "detail": "Extracción de texto, tablas y campos", "kind": "ai" },
+          { "name": "Azure OpenAI", "detail": "Modelo de chat + modelo de visión", "kind": "ai" },
+          { "name": "Azure Logic Apps", "detail": "Integración y notificación posterior", "kind": "compute" }
+        ]
+      },
+      {
+        "name": "Almacenamiento y seguridad",
+        "transversal": true,
+        "nodes": [
+          { "name": "Azure Blob Storage", "detail": "Documentos, resultados y prompts", "kind": "data" },
+          { "name": "Azure Key Vault", "detail": "Claves de los servicios de IA", "kind": "security" },
+          { "name": "Application Insights", "detail": "Telemetría de cada ejecución", "kind": "observability" }
+        ]
+      }
+    ]
+  },
+
+  "flow": [
+    "El operador entra al frontend Vite en App Service, que solo renderiza la interfaz y delega toda operación a la Function App.",
+    "La función sincroniza desde SFTP los ficheros de configuración —personalización, reglas de nomenclatura y rutas permitidas— hacia Blob Storage.",
+    "Antes de procesar se valida la nomenclatura de cada archivo contra las reglas vigentes y que su ruta esté habilitada. Lo que no cumple no entra al pipeline.",
+    "Document Intelligence aplica OCR y devuelve texto, tablas y campos con su posición; Azure OpenAI interpreta el contenido según el tipo detectado.",
+    "Un deployment de visión aparte atiende escaneos difíciles y la validación de firmas.",
+    "Documentos, resultados y prompts quedan en Blob Storage, lo que permite ajustar el comportamiento sin redesplegar."
+  ],
+
+  "components": [
+    { "name": "Azure Functions", "role": "Python v4 con 8 endpoints: sincronización SFTP, validación, procesamiento y firmas." },
+    { "name": "Azure App Service", "role": "Frontend Vite: interfaz de carga y revisión." },
+    { "name": "Document Intelligence", "role": "Extracción de texto, tablas y campos estructurados." },
+    { "name": "Azure OpenAI", "role": "Análisis y clasificación, con deployment de visión adicional." },
+    { "name": "Azure Logic Apps", "role": "Integración y notificación posterior al procesamiento." },
+    { "name": "Azure Blob Storage", "role": "Documentos, resultados y plantillas de prompt." }
+  ],
+
+  "insight": {
+    "title": "Credenciales fuera del navegador",
+    "text": "El frontend no habla con los servicios de IA: solo conoce la URL y la clave de la Function App. Eso mantiene las credenciales de Azure OpenAI y Document Intelligence fuera del cliente. Reconoce contrato, cronograma, ficha RUC, DNI, pagaré, declaración jurada, SPLAFT y tributario."
+  }
+}

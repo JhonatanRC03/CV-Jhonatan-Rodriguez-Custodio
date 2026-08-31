@@ -1,0 +1,81 @@
+{
+  "id": "dispute-management-agents",
+  "title": "Dispute Management Agents",
+  "category": "Multiagente",
+  "status": "Producción",
+  "region": "East US 2",
+  "description": "Gestión de disputas de tarjeta con seis agentes secuenciales sobre Azure AI Foundry Hosted Agents, con aprobación humana obligatoria antes de acciones irreversibles.",
+  "problem": "El ciclo de una disputa involucra clasificación, recopilación de evidencia, contraste normativo, comunicación y resolución. La cadena automatiza los seis pasos, pero detiene contracargo y cierre definitivo tras una puerta de aprobación humana explícita.",
+  "tech": ["Azure AI Foundry", "Hosted Agents", "Agent Framework", "Azure OpenAI", "Container Apps", "RAG de políticas", "Human-in-the-Loop"],
+
+  "architecture": {
+    "caption": "Cinco capas: consola operativa, hosted agent en Foundry, cadena de seis agentes, integraciones de negocio, y gobierno con datos.",
+    "layers": [
+      {
+        "name": "Consola operativa",
+        "nodes": [
+          { "name": "Operador de disputas", "detail": "Revisa casos y aprueba acciones", "kind": "user" },
+          { "name": "Azure Container Apps", "detail": "Entorno de la consola operativa", "kind": "compute" }
+        ]
+      },
+      {
+        "name": "Hosted Agent — Azure AI Foundry",
+        "nodes": [
+          { "name": "Azure AI Foundry", "detail": "Proyecto dispute-management-agents", "kind": "ai" },
+          { "name": "Agent Framework", "detail": "WorkflowBuilder · ResponsesHostServer", "kind": "agent" }
+        ]
+      },
+      {
+        "name": "Cadena de agentes",
+        "nodes": [
+          { "name": "Intake", "detail": "Ingesta del reclamo y clasificación", "kind": "agent" },
+          { "name": "Case", "detail": "Caso 360°: cliente, cuenta y tarjeta", "kind": "agent" },
+          { "name": "Data", "detail": "Evidencia: comercio, transacción y fraude", "kind": "agent" },
+          { "name": "Investigation", "detail": "Políticas (RAG) y marca de HITL", "kind": "agent" },
+          { "name": "Communication", "detail": "Aviso al cliente y crédito provisional", "kind": "agent" },
+          { "name": "Resolution", "detail": "Contracargo y cierre definitivo", "kind": "agent" }
+        ]
+      },
+      {
+        "name": "Integraciones de negocio",
+        "nodes": [
+          { "name": "CRM y Card Management", "detail": "Cliente, cuenta, tarjeta y transacción", "kind": "external" },
+          { "name": "Comercios y fraude", "detail": "Evidencia y puntaje de riesgo", "kind": "external" }
+        ]
+      },
+      {
+        "name": "Gobierno y datos",
+        "transversal": true,
+        "nodes": [
+          { "name": "Azure Cosmos DB", "detail": "Estado y trazabilidad de los casos", "kind": "data" },
+          { "name": "Azure Blob Storage", "detail": "Artefactos y datos de los casos", "kind": "data" },
+          { "name": "Container Registry", "detail": "Imagen privada de la consola", "kind": "compute" },
+          { "name": "Log Analytics", "detail": "Registros del entorno y trazas del flujo", "kind": "observability" }
+        ]
+      }
+    ]
+  },
+
+  "flow": [
+    "El operador registra o revisa el reclamo en la consola operativa publicada en Azure Container Apps.",
+    "El caso entra al Hosted Agent del proyecto de Foundry, construido con Agent Framework y publicado mediante ResponsesHostServer.",
+    "La cadena avanza secuencialmente: Intake clasifica, Case arma la vista 360° del cliente y Data reúne la evidencia de transacción y comercio.",
+    "Cada agente consulta los sistemas de negocio mediante function tools: CRM, gestión de tarjetas, datos de comercios y motor de fraude.",
+    "Investigation contrasta el caso con la normativa vía RAG y marca hitl_required si el puntaje de fraude supera 75, el monto excede 1.500 USD o la confianza cae bajo 0,70.",
+    "Communication notifica al cliente y gestiona el crédito provisional; Resolution ejecuta el contracargo, ambos tras aprobación humana."
+  ],
+
+  "components": [
+    { "name": "Azure AI Foundry", "role": "Proyecto que hospeda el workflow de seis agentes." },
+    { "name": "Azure Container Apps", "role": "Consola operativa de gestión de disputas." },
+    { "name": "Container Registry", "role": "Registro privado de la imagen de la consola." },
+    { "name": "Azure Cosmos DB", "role": "Estado y trazabilidad de los casos procesados." },
+    { "name": "Azure Blob Storage", "role": "Artefactos y datos de los casos." },
+    { "name": "Log Analytics", "role": "Registros del entorno y trazas del flujo." }
+  ],
+
+  "insight": {
+    "title": "Human-in-the-Loop garantizado por plataforma",
+    "text": "Las herramientas de contracargo y resolución final se declaran con approval_mode=\"always_require\": es el runtime de Foundry el que pausa la ejecución y exige aprobación. La garantía no depende del prompt ni de la disciplina del modelo, sino de la plataforma."
+  }
+}
