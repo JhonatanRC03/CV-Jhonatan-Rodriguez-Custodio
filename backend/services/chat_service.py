@@ -3,7 +3,7 @@
 import json
 import logging
 
-from openai import OpenAI
+from openai import AzureOpenAI
 
 from config import Config
 from services.cv_service import load_cv_brief
@@ -44,9 +44,10 @@ def _get_client():
         if not Config.AZURE_AI_ENDPOINT or not Config.AZURE_AI_API_KEY:
             raise RuntimeError("Faltan AZURE_AI_ENDPOINT o AZURE_AI_API_KEY en el archivo .env")
 
-        _client = OpenAI(
-            base_url=Config.AZURE_AI_ENDPOINT,
+        _client = AzureOpenAI(
+            azure_endpoint=Config.AZURE_AI_ENDPOINT,
             api_key=Config.AZURE_AI_API_KEY,
+            api_version=Config.AZURE_AI_API_VERSION,
             timeout=45,
         )
 

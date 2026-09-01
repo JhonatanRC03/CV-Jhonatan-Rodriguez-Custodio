@@ -61,9 +61,8 @@ function buildMeta({ model, usage, latency }) {
   const meta = el("div", "msg-meta");
   meta.append(el("span", "meta-model", model));
 
-  if (usage?.total) {
-    const tokens = el("span", null, `${usage.total.toLocaleString("es")} tokens`);
-    tokens.title = `Entrada: ${usage.input} · Salida: ${usage.output}`;
+  if (usage?.output) {
+    const tokens = el("span", null, `${usage.output.toLocaleString("es")} tokens`);
     meta.append(tokens);
   }
 

@@ -18,6 +18,7 @@ class Config:
     AZURE_AI_ENDPOINT = os.getenv("AZURE_AI_ENDPOINT", "")
     AZURE_AI_API_KEY = os.getenv("AZURE_AI_API_KEY", "")
     AZURE_AI_DEPLOYMENT = os.getenv("AZURE_AI_DEPLOYMENT", "gpt-5")
+    AZURE_AI_API_VERSION = os.getenv("AZURE_AI_API_VERSION", "2024-12-01-preview")
 
     CHAT_MAX_QUESTIONS = int(os.getenv("CHAT_MAX_QUESTIONS", 5))
     CHAT_WINDOW_HOURS = int(os.getenv("CHAT_WINDOW_HOURS", 24))
