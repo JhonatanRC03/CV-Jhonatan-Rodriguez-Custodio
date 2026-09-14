@@ -1,0 +1,70 @@
+{
+  "id": "document-knowledge",
+  "title": "Document Knowledge",
+  "category": "Arquitectura Cloud",
+  "status": "Producción",
+  "region": "Central US",
+  "description": "Plataforma de gestión del conocimiento empresarial sobre Azure Kubernetes Service, con ingesta documental desacoplada del servicio conversacional.",
+  "problem": "La ingesta documental es intensiva y por lotes, mientras la conversación exige baja latencia. Separarlas en servicios independientes dentro del clúster evita que un pico de procesamiento degrade la experiencia de chat.",
+  "tech": ["Azure Kubernetes Service", "Azure AI Search", "Azure OpenAI", "Document Intelligence", "Semantic Kernel", "Cosmos DB for MongoDB"],
+
+  "architecture": {
+    "caption": "Cuatro capas: acceso, plataforma de contenedores sobre AKS, servicios de IA, y conocimiento con datos.",
+    "layers": [
+      {
+        "name": "Acceso",
+        "nodes": [
+          { "name": "Usuario de negocio", "detail": "Búsqueda y consulta sobre el repositorio", "kind": "user" },
+          { "name": "Ingress público", "detail": "Punto de entrada TLS al clúster", "kind": "security" }
+        ]
+      },
+      {
+        "name": "Plataforma de contenedores",
+        "nodes": [
+          { "name": "Azure Kubernetes (AKS)", "detail": "Web App · Document Processor · AI Service", "kind": "compute" },
+          { "name": "Container Registry", "detail": "Imágenes de los servicios", "kind": "compute" },
+          { "name": "App Configuration", "detail": "Parámetros y feature flags centralizados", "kind": "compute" },
+          { "name": "Managed Identity", "detail": "Acceso a servicios sin claves", "kind": "security" }
+        ]
+      },
+      {
+        "name": "Servicios de IA",
+        "nodes": [
+          { "name": "Azure OpenAI", "detail": "Embeddings y generación de respuestas", "kind": "ai" },
+          { "name": "Document Intelligence", "detail": "Extracción estructurada en la ingesta", "kind": "ai" }
+        ]
+      },
+      {
+        "name": "Conocimiento y datos",
+        "nodes": [
+          { "name": "Azure AI Search", "detail": "Índice semántico del repositorio", "kind": "ai" },
+          { "name": "Cosmos DB for MongoDB", "detail": "Metadatos, resúmenes e historial de chat", "kind": "data" },
+          { "name": "Blob Storage + Queue", "detail": "Documentos, chunks y cola de trabajos", "kind": "data" }
+        ]
+      }
+    ]
+  },
+
+  "flow": [
+    "El usuario accede por el ingress del clúster, que publica la aplicación con TLS sobre un dominio propio.",
+    "La petición llega al Web App (React + TypeScript) desplegado como pod, junto a dos servicios internos: Document Processor y AI Service.",
+    "El servicio de consulta lanza la búsqueda contra Azure AI Search, cuyo índice vectorizado alimenta búsqueda documental y conversación.",
+    "El AI Service orquesta con Semantic Kernel: construye el prompt sobre los fragmentos recuperados, transmite en streaming y sugiere preguntas siguientes.",
+    "En la ingesta, los documentos entran en la cola de Storage; Document Intelligence aplica OCR y Azure OpenAI extrae contenido, temas y resúmenes."
+  ],
+
+  "components": [
+    { "name": "Azure Kubernetes Service", "role": "Clúster con tres servicios: Web App, Document Processor y AI Service." },
+    { "name": "Container Registry", "role": "Registro privado de imágenes de contenedor." },
+    { "name": "App Configuration", "role": "Configuración y feature flags centralizados." },
+    { "name": "Managed Identity", "role": "Acceso a servicios sin claves en la configuración de los pods." },
+    { "name": "Azure OpenAI", "role": "Embeddings y generación de respuestas." },
+    { "name": "Azure AI Search", "role": "Índice semántico sobre el repositorio documental." },
+    { "name": "Cosmos DB for MongoDB", "role": "Metadatos, resúmenes e historial de chat." }
+  ],
+
+  "insight": {
+    "title": "Por qué Kubernetes y no App Service",
+    "text": "Es la única solución del portafolio sobre AKS. El aislamiento entre el procesamiento por lotes y el servicio conversacional de baja latencia es lo que justifica el clúster frente al modelo de App Service que usan el resto de las soluciones."
+  }
+}

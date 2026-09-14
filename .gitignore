@@ -1,8 +1,12 @@
 __pycache__/
 *.pyc
-.env
 venv/
 .venv/
+
+# Secretos y variables de entorno — nunca subir
+.env
+.env.*
+!.env.example
 
 # Dependencias frontend (si agregas npm más adelante)
 node_modules/

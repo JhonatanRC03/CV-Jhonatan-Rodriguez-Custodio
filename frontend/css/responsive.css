@@ -1,0 +1,253 @@
+/* ═══════════════════════════════════════
+   RESPONSIVE — reflujo del layout
+   ───────────────────────────────────────
+   Solo adapta grids, tipografía y espaciado.
+   Los patrones exclusivos de móvil (drawer,
+   bottom sheet, safe areas, targets táctiles)
+   viven en mobile.css
+   ═══════════════════════════════════════ */
+
+/* ── Laptop pequeña ── */
+@media (max-width: 1024px) {
+  :root {
+    --max-w: 900px;
+  }
+
+  .hero-inner {
+    grid-template-columns: 1.4fr 0.6fr;
+    gap: 40px;
+  }
+
+  .about-grid {
+    grid-template-columns: 1fr;
+    gap: 44px;
+  }
+
+  .hero-stats {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .section {
+    padding: 90px 0;
+  }
+}
+
+/* ── Tablet ── */
+@media (max-width: 860px) {
+  .hero-inner {
+    grid-template-columns: 1fr;
+    gap: 36px;
+  }
+
+  .hero-visual {
+    order: -1;
+    max-width: 180px;
+  }
+
+  .hero-summary {
+    font-size: 1rem;
+  }
+
+  .section {
+    padding: 76px 0;
+  }
+
+  .section-title {
+    margin-bottom: 40px;
+  }
+
+  .cards-grid,
+  .skills-grid,
+  .certs-grid {
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 18px;
+  }
+}
+
+/* ── Móvil ── */
+@media (max-width: 640px) {
+  :root {
+    --header-h: 62px;
+  }
+
+  .container {
+    padding: 0 18px;
+  }
+
+  .section {
+    padding: 64px 0;
+  }
+
+  .section-title {
+    font-size: 1.5rem;
+    gap: 10px;
+    margin-bottom: 30px;
+  }
+
+  .section-title em {
+    font-size: 0.82rem;
+  }
+
+  /* Hero */
+  .hero {
+    padding-bottom: 28px;
+  }
+
+  .hero-greeting {
+    font-size: 0.85rem;
+    margin-bottom: 14px;
+  }
+
+  .hero-name {
+    font-size: 2.1rem;
+  }
+
+  .hero-role {
+    font-size: 1.25rem;
+    margin-bottom: 20px;
+  }
+
+  .hero-summary {
+    font-size: 0.95rem;
+    margin-bottom: 28px;
+  }
+
+  .hero-actions {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 12px;
+    margin-bottom: 30px;
+  }
+
+  .hero-visual {
+    max-width: 140px;
+  }
+
+  .hero-stats {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+    margin-top: 22px;
+  }
+
+  .stat {
+    padding: 16px 12px;
+  }
+
+  .stat-value {
+    font-size: 1.6rem;
+  }
+
+  .stat-label {
+    font-size: 0.75rem;
+  }
+
+  /* Tarjetas a una columna */
+  .cards-grid,
+  .skills-grid,
+  .certs-grid {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+
+  .card {
+    padding: 24px 20px;
+  }
+
+  /* Formato lista: aprovecha el ancho y evita partir el email */
+  .contact-grid {
+    grid-template-columns: 1fr;
+    gap: 10px;
+  }
+
+  .contact-card {
+    flex-direction: row;
+    align-items: center;
+    text-align: left;
+    gap: 14px;
+    padding: 14px 16px;
+  }
+
+  .contact-icon {
+    width: 44px;
+    height: 44px;
+    margin-bottom: 0;
+    flex-shrink: 0;
+  }
+
+  .contact-card h3 {
+    font-size: 0.95rem;
+    margin-bottom: 0;
+  }
+
+  .contact-value {
+    font-size: 0.78rem;
+  }
+
+  .contact-hint {
+    display: none;
+  }
+
+  /* El lanzador del asistente flota sobre el final de la página */
+  .section-contact {
+    padding-bottom: 120px;
+  }
+
+  /* Timeline */
+  .timeline {
+    padding-left: 24px;
+  }
+
+  .timeline-item {
+    padding-bottom: 34px;
+  }
+
+  .timeline-item::before {
+    left: -24px;
+    width: 12px;
+    height: 12px;
+  }
+
+  .timeline-item h3 {
+    font-size: 1.15rem;
+  }
+
+  .bullet-list li {
+    font-size: 0.9rem;
+    padding-left: 20px;
+  }
+
+  .about-text p {
+    font-size: 0.95rem;
+  }
+
+  .footer-inner {
+    flex-direction: column;
+    text-align: center;
+    gap: 8px;
+  }
+}
+
+/* ── Móvil estrecho ── */
+@media (max-width: 400px) {
+  .hero-name {
+    font-size: 1.85rem;
+  }
+
+  .hero-stats {
+    grid-template-columns: 1fr;
+  }
+
+  .contact-card {
+    gap: 12px;
+    padding: 13px 14px;
+  }
+
+  .contact-icon {
+    width: 40px;
+    height: 40px;
+  }
+
+  .contact-value {
+    font-size: 0.72rem;
+  }
+}

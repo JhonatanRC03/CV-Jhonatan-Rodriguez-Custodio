@@ -1,0 +1,77 @@
+{
+  "id": "risk-agents",
+  "title": "Risk Agents — Riesgo Crediticio",
+  "category": "Multiagente",
+  "status": "Producción",
+  "region": "East US 2",
+  "description": "Evaluación de riesgo crediticio empresarial con un orquestador que reparte el análisis entre cuatro agentes especializados y un quinto que consolida el informe.",
+  "problem": "La evaluación crediticia exigía cruzar manualmente historial interno, contexto macroeconómico y ratios financieros. El sistema paraleliza esas tres dimensiones en agentes independientes y entrega un informe con calificación y recomendación que el analista solo valida.",
+  "tech": ["Azure AI Foundry", "Azure OpenAI", "Azure Functions", "Azure App Service", "Web Search", "FastAPI", "React"],
+
+  "architecture": {
+    "caption": "Cinco capas: aplicación de negocio, orquestación en Foundry, agentes especializados, herramientas y fuentes, y datos con observabilidad.",
+    "layers": [
+      {
+        "name": "Aplicación de negocio",
+        "nodes": [
+          { "name": "Analista de riesgos", "detail": "Evalúa, ajusta y registra la decisión", "kind": "user" },
+          { "name": "Azure App Service", "detail": "App de crédito · React + backend FastAPI", "kind": "compute" }
+        ]
+      },
+      {
+        "name": "Orquestación — Azure AI Foundry",
+        "nodes": [
+          { "name": "Azure AI Foundry", "detail": "Proyecto, modelo y registro de agentes", "kind": "ai" },
+          { "name": "RiskOrchestrator", "detail": "workflow agent · reparte y consolida", "kind": "agent" }
+        ]
+      },
+      {
+        "name": "Agentes especializados",
+        "nodes": [
+          { "name": "ReportReviewerAgent", "detail": "Perfil, historial y reportes previos", "kind": "agent" },
+          { "name": "PublicInfoAgent", "detail": "Entorno macro, sector y noticias", "kind": "agent" },
+          { "name": "FinancialRatiosAgent", "detail": "Ratios, tendencias y score", "kind": "agent" },
+          { "name": "ReportGeneratorAgent", "detail": "Informe, calificación y recomendación", "kind": "agent" }
+        ]
+      },
+      {
+        "name": "Herramientas y fuentes",
+        "nodes": [
+          { "name": "Azure Functions — API", "detail": "8 endpoints REST vía OpenAPI", "kind": "compute" },
+          { "name": "Búsqueda web", "detail": "Fuentes públicas y contexto sectorial", "kind": "external" },
+          { "name": "SharePoint", "detail": "Reportes internos del área de riesgos", "kind": "external" }
+        ]
+      },
+      {
+        "name": "Datos y observabilidad",
+        "transversal": true,
+        "nodes": [
+          { "name": "Azure Blob Storage", "detail": "Datos de empresas que alimentan la API", "kind": "data" },
+          { "name": "Application Insights", "detail": "Trazas de agentes y telemetría de la API", "kind": "observability" }
+        ]
+      }
+    ]
+  },
+
+  "flow": [
+    "El analista abre una solicitud en la app de crédito. El backend FastAPI transmite el avance en streaming: cada agente se ve trabajar en tiempo real.",
+    "La petición llega al proyecto de Azure AI Foundry, donde el RiskOrchestrator descompone la evaluación y activa a los agentes especializados.",
+    "Tres agentes trabajan en dimensiones independientes: ReportReviewer (perfil e historial), PublicInfo (macro y sector) y FinancialRatios (ratios y score).",
+    "Las consultas de datos del cliente pasan por la Function App, expuesta a los agentes como herramienta OpenAPI.",
+    "El contexto externo se obtiene con búsqueda web y el conocimiento interno con grounding de SharePoint.",
+    "El ReportGeneratorAgent consolida las tres líneas en un informe con calificación y recomendación para el registro de la decisión."
+  ],
+
+  "components": [
+    { "name": "Azure AI Foundry", "role": "Proyecto que hospeda el modelo y los agentes registrados." },
+    { "name": "Azure App Service", "role": "App de procesamiento de crédito y backend de streaming." },
+    { "name": "Azure Functions", "role": "API de datos expuesta a los agentes como herramienta OpenAPI." },
+    { "name": "Azure Blob Storage", "role": "Datos de empresas que alimentan la API." },
+    { "name": "Application Insights", "role": "Trazas de ejecución de los agentes y telemetría de la API." }
+  ],
+
+  "insight": {
+    "title": "Contrato de datos explícito",
+    "text": "Los agentes no acceden a datos por su cuenta: todo pasa por herramientas declaradas (OpenAPI, búsqueda web y grounding de SharePoint). Eso mantiene el contrato auditable y permite sustituir la Function App por las fuentes corporativas reales sin alterar el diseño de agentes."
+  }
+}

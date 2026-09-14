@@ -1,0 +1,242 @@
+/* ── Filtros, proyectos, skills, certificaciones y listas laterales ── */
+/* ── Filtros de proyectos ── */
+.filter-bar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 32px;
+}
+
+.filter-btn {
+  background: transparent;
+  border: 1px solid var(--border);
+  color: var(--text-muted);
+  padding: 7px 18px;
+  border-radius: 20px;
+  font-size: 0.85rem;
+  cursor: pointer;
+  transition: var(--transition);
+}
+
+.filter-btn:hover {
+  border-color: var(--border-hover);
+  color: var(--text);
+}
+
+.filter-btn.active {
+  background: rgba(0, 242, 254, 0.1);
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+/* ── Card de proyecto ── */
+.project-card {
+  cursor: pointer;
+}
+
+.project-card:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+}
+
+.project-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+
+.project-head .project-category {
+  margin-bottom: 0;
+}
+
+.project-category {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  color: var(--accent);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  margin-bottom: 10px;
+}
+
+.tech-more {
+  color: var(--accent) !important;
+  border-color: var(--border-hover) !important;
+}
+
+/* Invita al clic sin ocupar espacio hasta el hover */
+.project-cue {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 18px;
+  font-family: var(--font-mono);
+  font-size: 0.76rem;
+  color: var(--text-dim);
+  transition: var(--transition);
+}
+
+.project-card:hover .project-cue,
+.project-card:focus-visible .project-cue {
+  color: var(--accent);
+  gap: 10px;
+}
+
+.card h3 {
+  font-size: 1.2rem;
+  margin-bottom: 10px;
+}
+
+.card p {
+  color: var(--text-muted);
+  font-size: 0.92rem;
+  flex: 1;
+}
+
+.tech-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 20px;
+}
+
+.tech-list li {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  color: var(--text-dim);
+  background: rgba(255, 255, 255, 0.035);
+  border: 1px solid var(--border);
+  padding: 3px 10px;
+  border-radius: 5px;
+}
+
+/* ── Card de skills ── */
+.skill-card h3 {
+  font-size: 1rem;
+  margin-bottom: 16px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.skill-card h3::before {
+  content: "";
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--accent);
+  box-shadow: 0 0 10px var(--accent);
+}
+
+.tag-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.tag {
+  font-size: 0.82rem;
+  color: var(--text-muted);
+  background: rgba(255, 255, 255, 0.035);
+  border: 1px solid var(--border);
+  padding: 5px 13px;
+  border-radius: 20px;
+  transition: var(--transition);
+}
+
+.tag:hover {
+  color: var(--accent);
+  border-color: var(--border-hover);
+  transform: translateY(-2px);
+}
+
+/* ── Card de certificación ── */
+.cert-card {
+  color: inherit;
+}
+
+.cert-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 14px;
+}
+
+.cert-code {
+  font-family: var(--font-mono);
+  font-size: 1.15rem;
+  font-weight: 600;
+  background: var(--gradient);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.cert-level {
+  font-size: 0.68rem;
+  font-family: var(--font-mono);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--text-dim);
+  border: 1px solid var(--border);
+  padding: 3px 10px;
+  border-radius: 20px;
+}
+
+.cert-name {
+  font-size: 0.95rem;
+  color: var(--text);
+  font-weight: 500;
+  margin-bottom: 10px;
+  line-height: 1.5;
+}
+
+.cert-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-family: var(--font-mono);
+  font-size: 0.76rem;
+  color: var(--text-dim);
+  margin-top: auto;
+  padding-top: 14px;
+}
+
+.cert-card:hover .cert-verify {
+  color: var(--accent);
+}
+
+/* ── Listas laterales (educación / mentoría) ── */
+.education-list li,
+.mentoring-list li {
+  border-left: 2px solid var(--border);
+  padding: 0 0 0 18px;
+  margin-bottom: 22px;
+  transition: var(--transition);
+}
+
+.education-list li:hover,
+.mentoring-list li:hover {
+  border-left-color: var(--accent);
+}
+
+.item-title {
+  font-weight: 600;
+  color: var(--text);
+  font-size: 0.95rem;
+  display: block;
+}
+
+.item-sub {
+  color: var(--text-muted);
+  font-size: 0.88rem;
+  display: block;
+}
+
+.item-date {
+  font-family: var(--font-mono);
+  font-size: 0.76rem;
+  color: var(--text-dim);
+}
+

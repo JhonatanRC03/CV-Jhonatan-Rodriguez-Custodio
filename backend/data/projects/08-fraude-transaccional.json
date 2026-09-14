@@ -1,0 +1,76 @@
+{
+  "id": "fraude-transaccional",
+  "title": "Fraude Transaccional",
+  "category": "Multiagente",
+  "status": "En desarrollo",
+  "region": "Azure AI Foundry · Container Apps",
+  "description": "Análisis automatizado de alertas de fraude con tarjeta. Un agente pondera la evidencia, determina el nivel de riesgo y emite un dictamen sustentado factor por factor.",
+  "problem": "Las alertas de fraude llegan en volumen y exigen criterio, no solo reglas. El sistema prepara el expediente por código y delega el juicio al agente, que debe sustentar cada factor con el dato exacto del caso para que el analista pueda contrastarlo.",
+  "tech": ["Azure AI Foundry", "Azure Container Apps", "Cosmos DB", "Blob Storage", "Microsoft Entra ID", "FastAPI"],
+
+  "architecture": {
+    "caption": "Cinco capas: origen y consumo, servicio de aplicación, motor de análisis, datos, y seguridad con observabilidad.",
+    "layers": [
+      {
+        "name": "Origen y consumo",
+        "nodes": [
+          { "name": "Sistema externo", "detail": "Alerta cruda autenticada por API key", "kind": "external" },
+          { "name": "Consola del analista", "detail": "Confirma, descarta o escala la alerta", "kind": "user" }
+        ]
+      },
+      {
+        "name": "Servicio de aplicación",
+        "nodes": [
+          { "name": "Azure Container Apps", "detail": "Responde 202 y analiza en segundo plano", "kind": "compute" },
+          { "name": "Análisis por lotes", "detail": "Reproceso masivo sobre casos en Blob", "kind": "compute" }
+        ]
+      },
+      {
+        "name": "Motor de análisis",
+        "nodes": [
+          { "name": "Motor transaccional", "detail": "Prepara hechos e indicadores del caso", "kind": "compute" },
+          { "name": "Azure AI Foundry", "detail": "Agente analista: decide nivel y redacta dictamen", "kind": "agent" }
+        ]
+      },
+      {
+        "name": "Datos",
+        "nodes": [
+          { "name": "Azure Cosmos DB", "detail": "Estado del caso y dictamen emitido", "kind": "data" },
+          { "name": "Azure Blob Storage", "detail": "Casos en JSON para el análisis por lotes", "kind": "data" }
+        ]
+      },
+      {
+        "name": "Seguridad y observabilidad",
+        "transversal": true,
+        "nodes": [
+          { "name": "Microsoft Entra ID", "detail": "Protege el acceso a la consola", "kind": "security" },
+          { "name": "Identidad administrada", "detail": "Acceso sin claves en configuración", "kind": "security" },
+          { "name": "Log Analytics", "detail": "Trazas de cada ejecución de análisis", "kind": "observability" }
+        ]
+      }
+    ]
+  },
+
+  "flow": [
+    "Un sistema externo envía la alerta cruda al endpoint de ingesta, autenticado con API key. El servicio responde de inmediato sin bloquear al emisor.",
+    "El análisis arranca en segundo plano: el motor transaccional compara la operación contra el perfil de gasto y mide desviaciones de monto, canal y horario.",
+    "El agente analista, hospedado en Azure AI Foundry, recibe esos hechos y decide el nivel de riesgo ponderando la evidencia.",
+    "Emite el dictamen: resumen ejecutivo, factores de riesgo con su dato exacto, nivel asignado y recomendaciones.",
+    "El dictamen se guarda en Cosmos DB junto al caso. El proceso es idempotente: si el dictamen ya existe, no se reprocesa.",
+    "En paralelo, el módulo de análisis por lotes reutiliza el mismo servicio para reprocesar de forma desatendida los casos en Blob Storage."
+  ],
+
+  "components": [
+    { "name": "Azure Container Apps", "role": "Servicio de alertas en FastAPI: ingesta, análisis en segundo plano y consola." },
+    { "name": "Azure AI Foundry", "role": "Hospeda el agente analista que decide el nivel de riesgo y redacta el dictamen." },
+    { "name": "Motor transaccional", "role": "Prepara los hechos e indicadores del caso que consume el agente." },
+    { "name": "Azure Cosmos DB", "role": "Estado del caso, transiciones y dictamen emitido." },
+    { "name": "Azure Blob Storage", "role": "Casos en JSON que alimentan el análisis por lotes." },
+    { "name": "Microsoft Entra ID", "role": "Protege el acceso a la consola de análisis por lotes." }
+  ],
+
+  "insight": {
+    "title": "El reparto entre código y agente",
+    "text": "El código no juzga: prepara el expediente. Quien pondera la evidencia y fija el nivel de riesgo es el agente, que razona sobre el cruce de señales en lugar de sumar puntos fijos. Esa exigencia de sustento hace el dictamen revisable: el analista recibe el argumento completo, no un veredicto opaco."
+  }
+}

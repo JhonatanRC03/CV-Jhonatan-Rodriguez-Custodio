@@ -1,0 +1,255 @@
+import { icon } from "./icons.js";
+import { openProject } from "./components/project-modal.js";
+import { $, el, withLeadEmphasis } from "./utils.js";
+
+/** Canales de contacto derivados del perfil. */
+function contactChannels(profile) {
+  return [
+    {
+      key: "mail",
+      label: "Email",
+      value: profile.email,
+      href: `mailto:${profile.email}`,
+      hint: "Escríbeme un correo",
+    },
+    {
+      key: "whatsapp",
+      label: "WhatsApp",
+      value: profile.phone,
+      href: `https://wa.me/${profile.whatsapp}`,
+      hint: "Respuesta rápida por chat",
+      external: true,
+    },
+    {
+      key: "linkedin",
+      label: "LinkedIn",
+      value: "/in/jrc03",
+      href: profile.linkedin,
+      hint: "Conectemos profesionalmente",
+      external: true,
+    },
+    {
+      key: "github",
+      label: "GitHub",
+      value: "@JhonatanRC03",
+      href: profile.github,
+      hint: "Revisa mi código",
+      external: true,
+    },
+  ];
+}
+
+/* ── Hero ── */
+export function renderHero(profile) {
+  $("#hero-summary").textContent = profile.summary;
+
+  const social = $("#hero-social");
+  contactChannels(profile).forEach(({ key, label, href, external }) => {
+    const a = el("a");
+    a.href = href;
+    a.title = label;
+    a.setAttribute("aria-label", label);
+    if (external) {
+      a.target = "_blank";
+      a.rel = "noopener noreferrer";
+    }
+    a.append(icon(key, 20));
+
+    const li = el("li");
+    li.append(a);
+    social.append(li);
+  });
+
+  const stats = $("#hero-stats");
+  profile.stats.forEach(({ value, label }) => {
+    const card = el("div", "stat");
+    const number = el("div", "stat-value", value);
+    number.dataset.count = value;
+    card.append(number, el("div", "stat-label", label));
+    stats.append(card);
+  });
+}
+
+/* ── Sobre mí ── */
+export function renderAbout(profile, education, mentoring) {
+  const about = $("#about-text");
+  about.append(el("p", null, profile.summary), el("p", null, profile.summaryExtended));
+
+  const eduList = $("#education-list");
+  education.forEach((item) => {
+    const li = el("li");
+    li.append(
+      el("span", "item-title", item.degree),
+      el("span", "item-sub", item.institution),
+      el("span", "item-date", item.period)
+    );
+    eduList.append(li);
+  });
+
+  const mentorList = $("#mentoring-list");
+  mentoring.forEach((item) => {
+    const li = el("li");
+    li.append(
+      el("span", "item-title", item.title),
+      el("span", "item-sub", item.description),
+      el("span", "item-date", item.date)
+    );
+    mentorList.append(li);
+  });
+}
+
+/* ── Experiencia ── */
+export function renderExperience(experience) {
+  const timeline = $("#timeline");
+
+  experience.forEach((job) => {
+    const item = el("div", `timeline-item${job.current ? " current" : ""}`);
+
+    const meta = el("div", "timeline-meta");
+    meta.append(el("span", "timeline-date", job.period));
+    if (job.current) meta.append(el("span", "badge-current", "Actual"));
+
+    const list = el("ul", "bullet-list");
+    job.highlights.forEach((text) => {
+      const li = el("li");
+      li.append(withLeadEmphasis(text));
+      list.append(li);
+    });
+
+    item.append(
+      meta,
+      el("h3", null, job.role),
+      el("p", "timeline-company", `${job.company} · ${job.location}`),
+      list
+    );
+    timeline.append(item);
+  });
+}
+
+/* ── Proyectos ── */
+export function renderProjects(projects) {
+  const grid = $("#projects-grid");
+  const filters = $("#project-filters");
+  const categories = ["Todos", ...new Set(projects.map((p) => p.category))];
+
+  const paint = (category) => {
+    grid.replaceChildren();
+    projects
+      .filter((p) => category === "Todos" || p.category === category)
+      .forEach((project) => {
+        const card = el("article", "card project-card");
+        card.tabIndex = 0;
+        card.setAttribute("role", "button");
+        card.setAttribute("aria-label", `Ver detalle de ${project.title}`);
+
+        const head = el("div", "project-head");
+        head.append(el("span", "project-category", project.category));
+        if (project.status === "En desarrollo") {
+          head.append(el("span", "modal-status wip", project.status));
+        }
+
+        // El resto del stack se muestra en el modal.
+        const tech = el("ul", "tech-list");
+        project.tech.slice(0, 4).forEach((t) => tech.append(el("li", null, t)));
+        if (project.tech.length > 4) {
+          tech.append(el("li", "tech-more", `+${project.tech.length - 4}`));
+        }
+
+        const cue = el("span", "project-cue", "Ver arquitectura y detalle →");
+
+        card.append(
+          head,
+          el("h3", null, project.title),
+          el("p", null, project.description),
+          tech,
+          cue
+        );
+
+        const open = () => openProject(project);
+        card.addEventListener("click", open);
+        card.addEventListener("keydown", (e) => {
+          if (e.key === "Enter" || e.key === " ") {
+            e.preventDefault();
+            open();
+          }
+        });
+
+        grid.append(card);
+      });
+  };
+
+  categories.forEach((category, index) => {
+    const btn = el("button", `filter-btn${index === 0 ? " active" : ""}`, category);
+    btn.type = "button";
+    btn.addEventListener("click", () => {
+      filters.querySelector(".active")?.classList.remove("active");
+      btn.classList.add("active");
+      paint(category);
+    });
+    filters.append(btn);
+  });
+
+  paint("Todos");
+}
+
+/* ── Stack ── */
+export function renderSkills(skills) {
+  const grid = $("#skills-grid");
+
+  skills.forEach((group) => {
+    const card = el("article", "card skill-card");
+    const tags = el("ul", "tag-list");
+    group.items.forEach((item) => tags.append(el("li", "tag", item)));
+
+    card.append(el("h3", null, group.category), tags);
+    grid.append(card);
+  });
+}
+
+/* ── Certificaciones ── */
+export function renderCertifications(certifications) {
+  const grid = $("#certs-grid");
+
+  certifications.forEach((cert) => {
+    const card = el("a", "card cert-card");
+    card.href = cert.url;
+    card.target = "_blank";
+    card.rel = "noopener noreferrer";
+
+    const header = el("div", "cert-header");
+    header.append(el("span", "cert-code", cert.code), el("span", "cert-level", cert.level));
+
+    const footer = el("div", "cert-footer");
+    footer.append(el("span", null, cert.period), el("span", "cert-verify", "Verificar ↗"));
+
+    card.append(header, el("p", "cert-name", cert.name), footer);
+    grid.append(card);
+  });
+}
+
+/* ── Contacto ── */
+export function renderContactLinks(profile) {
+  const grid = $("#contact-grid");
+
+  contactChannels(profile).forEach(({ key, label, value, href, hint, external }) => {
+    const card = el("a", `card contact-card contact-${key}`);
+    card.href = href;
+    if (external) {
+      card.target = "_blank";
+      card.rel = "noopener noreferrer";
+    }
+
+    const badge = el("span", "contact-icon");
+    badge.append(icon(key, 24));
+
+    const body = el("span", "contact-body");
+    body.append(
+      el("h3", null, label),
+      el("span", "contact-value", value),
+      el("span", "contact-hint", hint)
+    );
+
+    card.append(badge, body);
+    grid.append(card);
+  });
+}
