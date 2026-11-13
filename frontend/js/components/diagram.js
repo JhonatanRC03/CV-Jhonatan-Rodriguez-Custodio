@@ -5,16 +5,12 @@
  * que determina su color. Añadir un servicio nuevo es añadirlo al JSON.
  */
 
+import { t } from "../i18n.js";
 import { el } from "../utils.js";
 
-const KIND_LABELS = {
-  user: "Usuario",
-  compute: "Cómputo",
-  ai: "IA / Cognitivo",
-  data: "Datos",
-  security: "Seguridad",
-  observability: "Observabilidad",
-  integration: "Integración",
+const kindLabel = (kind) => {
+  const label = t(`diagram.${kind}`);
+  return label === `diagram.${kind}` ? kind : label;
 };
 
 function buildNode({ name, detail, kind = "compute" }) {
@@ -46,7 +42,7 @@ function buildLegend(layers) {
     const item = el("div", "legend-item");
     const dot = el("span", "legend-dot");
     dot.dataset.kind = kind;
-    item.append(dot, el("span", null, KIND_LABELS[kind] || kind));
+    item.append(dot, el("span", null, kindLabel(kind)));
     legend.append(item);
   });
 

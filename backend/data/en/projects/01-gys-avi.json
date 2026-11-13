@@ -1,0 +1,82 @@
+{
+  "id": "gys-avi",
+  "title": "GyS AVI — Document Chatbot",
+  "category": "RAG / GenAI",
+  "status": "Production",
+  "region": "East US 2",
+  "description": "Conversational assistant over corporate documents using the RAG pattern: hybrid search, semantic re-ranking and answers with citations traceable to the source document.",
+  "problem": "Teams were losing hours searching for information scattered across institutional documentation. The solution lets them ask in natural language and get the answer with a citation linked to the supporting document, removing manual search without sacrificing traceability.",
+  "tech": ["Azure App Service", "Azure OpenAI", "Azure AI Search", "Document Intelligence", "Cosmos DB", "Blob Storage"],
+
+  "architecture": {
+    "caption": "Five layers: access, application, retrieval and generation, ingestion and data, plus a cross-cutting band for security and observability.",
+    "layers": [
+      {
+        "name": "Users and access",
+        "nodes": [
+          { "name": "Corporate user", "detail": "Asks in natural language", "kind": "user" },
+          { "name": "Access portal", "detail": "Custom JWT login · user onboarding", "kind": "security" }
+        ]
+      },
+      {
+        "name": "Application layer",
+        "nodes": [
+          { "name": "Azure App Service", "detail": "Python backend + React frontend", "kind": "compute" },
+          { "name": "Admin API", "detail": "Users, history and configuration", "kind": "compute" }
+        ]
+      },
+      {
+        "name": "Retrieval and generation (RAG)",
+        "nodes": [
+          { "name": "Azure AI Search", "detail": "Hybrid + semantic ranker", "kind": "ai" },
+          { "name": "Azure OpenAI", "detail": "Chat · embeddings · GPT-4 vision", "kind": "ai" },
+          { "name": "Azure AI Speech", "detail": "Voice input and read-aloud", "kind": "ai" },
+          { "name": "Content Understanding", "detail": "Image and media description", "kind": "ai" }
+        ]
+      },
+      {
+        "name": "Ingestion and data",
+        "nodes": [
+          { "name": "Azure Blob Storage", "detail": "Source documents and citations", "kind": "data" },
+          { "name": "Document Intelligence", "detail": "Layout, tables and chunking", "kind": "ai" },
+          { "name": "Azure Cosmos DB", "detail": "Portal users and history", "kind": "data" }
+        ]
+      },
+      {
+        "name": "Security and observability",
+        "transversal": true,
+        "nodes": [
+          { "name": "Azure Key Vault", "detail": "Secrets and service keys", "kind": "security" },
+          { "name": "Application Insights", "detail": "Traces, latency and errors", "kind": "observability" },
+          { "name": "Log Analytics", "detail": "Centralized log queries", "kind": "observability" },
+          { "name": "Communication Services", "detail": "Transactional email for the portal", "kind": "observability" }
+        ]
+      }
+    ]
+  },
+
+  "flow": [
+    "The user signs in to the access portal, which validates credentials against Cosmos DB and issues its own JWT.",
+    "From the portal the chat application opens on App Service, which builds the retrieval pipeline and keeps the conversation thread.",
+    "The backend embeds the question with Azure OpenAI and runs a hybrid search (vector + keyword) on Azure AI Search.",
+    "The semantic ranker re-orders the passages and returns the most relevant chunks together with their source document.",
+    "Azure OpenAI writes the answer using only those passages as context and returns citations linked to the document in Blob Storage.",
+    "Ingestion runs separately: Document Intelligence extracts text, tables and structure, and the result is chunked, embedded and indexed."
+  ],
+
+  "components": [
+    { "name": "Azure App Service", "role": "RAG orchestration backend and web frontend." },
+    { "name": "Azure OpenAI", "role": "Chat, embedding and vision models." },
+    { "name": "Azure AI Search", "role": "Vector and hybrid index with semantic re-ranking." },
+    { "name": "Document Intelligence", "role": "Layout, table and text extraction at ingestion." },
+    { "name": "Azure Blob Storage", "role": "Original documents backing every citation." },
+    { "name": "Azure Cosmos DB", "role": "Portal users and conversation history." },
+    { "name": "Azure Key Vault", "role": "Custody of secrets and keys." },
+    { "name": "Application Insights", "role": "Application telemetry." }
+  ],
+
+  "insight": {
+    "title": "Architecture decision",
+    "text": "Access control comes from a custom portal with JWT on Cosmos DB, instead of the identity-based filtering of the base accelerator. For production with sensitive information, enabling Entra ID and per-document filtering in the search query would be the next step."
+  }
+}

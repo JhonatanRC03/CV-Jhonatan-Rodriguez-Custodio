@@ -33,3 +33,24 @@ export function lockScroll(owner, locked) {
   locked ? scrollLocks.add(owner) : scrollLocks.delete(owner);
   document.body.classList.toggle("no-scroll", scrollLocks.size > 0);
 }
+
+/** "Producción" / "Production" → en vivo; cualquier otro estado → en desarrollo. */
+export const isLive = (status = "") => /^produc/i.test(status);
+
+/* ── Aviso breve en la parte inferior ── */
+let toastTimer;
+
+export function showToast(message) {
+  const toast = $("#toast");
+  if (!toast) return;
+
+  toast.textContent = message;
+  toast.hidden = false;
+  requestAnimationFrame(() => toast.classList.add("visible"));
+
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => {
+    toast.classList.remove("visible");
+    setTimeout(() => (toast.hidden = true), 300);
+  }, 2200);
+}

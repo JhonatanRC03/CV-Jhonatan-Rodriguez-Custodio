@@ -15,5 +15,5 @@ export function initProjectModal() {
 }
 
 export function openProject(project) {
-  shell?.open(buildProjectDetail(project));
+  shell?.open(buildProjectDetail(project, { onAsk: () => shell.close({ restoreFocus: false }) }));
 }

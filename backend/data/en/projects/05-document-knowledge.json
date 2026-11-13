@@ -1,0 +1,70 @@
+{
+  "id": "document-knowledge",
+  "title": "Document Knowledge",
+  "category": "Cloud Architecture",
+  "status": "Production",
+  "region": "Central US",
+  "description": "Enterprise knowledge-management platform on Azure Kubernetes Service, with document ingestion decoupled from the conversational service.",
+  "problem": "Document ingestion is heavy and batch-oriented, while conversation demands low latency. Splitting them into independent services inside the cluster prevents a processing spike from degrading the chat experience.",
+  "tech": ["Azure Kubernetes Service", "Azure AI Search", "Azure OpenAI", "Document Intelligence", "Semantic Kernel", "Cosmos DB for MongoDB"],
+
+  "architecture": {
+    "caption": "Four layers: access, container platform on AKS, AI services, and knowledge with data.",
+    "layers": [
+      {
+        "name": "Access",
+        "nodes": [
+          { "name": "Business user", "detail": "Searches and queries the repository", "kind": "user" },
+          { "name": "Public ingress", "detail": "TLS entry point to the cluster", "kind": "security" }
+        ]
+      },
+      {
+        "name": "Container platform",
+        "nodes": [
+          { "name": "Azure Kubernetes (AKS)", "detail": "Web App · Document Processor · AI Service", "kind": "compute" },
+          { "name": "Container Registry", "detail": "Service images", "kind": "compute" },
+          { "name": "App Configuration", "detail": "Centralized settings and feature flags", "kind": "compute" },
+          { "name": "Managed Identity", "detail": "Keyless access to services", "kind": "security" }
+        ]
+      },
+      {
+        "name": "AI services",
+        "nodes": [
+          { "name": "Azure OpenAI", "detail": "Embeddings and answer generation", "kind": "ai" },
+          { "name": "Document Intelligence", "detail": "Structured extraction at ingestion", "kind": "ai" }
+        ]
+      },
+      {
+        "name": "Knowledge and data",
+        "nodes": [
+          { "name": "Azure AI Search", "detail": "Semantic index of the repository", "kind": "ai" },
+          { "name": "Cosmos DB for MongoDB", "detail": "Metadata, summaries and chat history", "kind": "data" },
+          { "name": "Blob Storage + Queue", "detail": "Documents, chunks and job queue", "kind": "data" }
+        ]
+      }
+    ]
+  },
+
+  "flow": [
+    "The user comes in through the cluster ingress, which publishes the application with TLS on a custom domain.",
+    "The request reaches the Web App (React + TypeScript) deployed as a pod, alongside two internal services: Document Processor and AI Service.",
+    "The query service searches Azure AI Search, whose vectorized index powers both document search and conversation.",
+    "The AI Service orchestrates with Semantic Kernel: builds the prompt over the retrieved chunks, streams the answer and suggests follow-up questions.",
+    "At ingestion, documents enter the Storage queue; Document Intelligence applies OCR and Azure OpenAI extracts content, topics and summaries."
+  ],
+
+  "components": [
+    { "name": "Azure Kubernetes Service", "role": "Cluster with three services: Web App, Document Processor and AI Service." },
+    { "name": "Container Registry", "role": "Private container image registry." },
+    { "name": "App Configuration", "role": "Centralized configuration and feature flags." },
+    { "name": "Managed Identity", "role": "Service access without keys in pod configuration." },
+    { "name": "Azure OpenAI", "role": "Embeddings and answer generation." },
+    { "name": "Azure AI Search", "role": "Semantic index over the document repository." },
+    { "name": "Cosmos DB for MongoDB", "role": "Metadata, summaries and chat history." }
+  ],
+
+  "insight": {
+    "title": "Why Kubernetes instead of App Service",
+    "text": "It is the only solution in the portfolio running on AKS. Isolating batch processing from the low-latency conversational service is what justifies the cluster over the App Service model used by the rest of the solutions."
+  }
+}

@@ -1,19 +1,28 @@
-import { TYPED_ROLES } from "./config.js";
+import { getLang, onLangChange, setLang, t } from "./i18n.js";
 import { $, $$, lockScroll } from "./utils.js";
 
 /* ── Header con fondo al hacer scroll + barra de progreso ── */
 export function initScrollEffects() {
   const header = $("#header");
   const progress = $("#scroll-progress");
+  let ticking = false;
 
-  const onScroll = () => {
+  const update = () => {
     header.classList.toggle("scrolled", window.scrollY > 40);
-    const max = document.body.scrollHeight - window.innerHeight;
+    const max = document.documentElement.scrollHeight - window.innerHeight;
     progress.style.width = `${max > 0 ? (window.scrollY / max) * 100 : 0}%`;
+    ticking = false;
   };
 
-  window.addEventListener("scroll", onScroll, { passive: true });
-  onScroll();
+  window.addEventListener(
+    "scroll",
+    () => {
+      if (!ticking) requestAnimationFrame(update);
+      ticking = true;
+    },
+    { passive: true }
+  );
+  update();
 }
 
 /* ── Menú móvil ── */
@@ -21,18 +30,30 @@ export function initNav() {
   const toggle = $("#nav-toggle");
   const links = $("#nav-links");
   const backdrop = $("#nav-backdrop");
+  const mobile = window.matchMedia("(max-width: 860px)");
 
   const isOpen = () => toggle.getAttribute("aria-expanded") === "true";
 
+  const syncLabel = () => toggle.setAttribute("aria-label", t(isOpen() ? "nav.close" : "nav.open"));
+
+  // En móvil el drawer cerrado no debe ser alcanzable con Tab ni lectores de pantalla.
+  const syncInert = () => {
+    const hidden = mobile.matches && !isOpen();
+    links.toggleAttribute("inert", hidden);
+  };
+
   const setOpen = (open) => {
     toggle.setAttribute("aria-expanded", String(open));
-    toggle.setAttribute("aria-label", open ? "Cerrar menú" : "Abrir menú");
+    syncLabel();
     links.classList.toggle("open", open);
+    document.body.classList.toggle("nav-open", open);
     lockScroll("nav", open);
+    syncInert();
 
     if (open) {
       backdrop.hidden = false;
       requestAnimationFrame(() => backdrop.classList.add("visible"));
+      links.querySelector("a")?.focus({ preventScroll: true });
     } else {
       backdrop.classList.remove("visible");
       setTimeout(() => {
@@ -56,9 +77,28 @@ export function initNav() {
   });
 
   // Al pasar a escritorio el drawer deja de existir: hay que liberar el scroll.
-  window.matchMedia("(min-width: 861px)").addEventListener("change", (e) => {
-    if (e.matches && isOpen()) setOpen(false);
+  mobile.addEventListener("change", () => {
+    if (!mobile.matches && isOpen()) setOpen(false);
+    syncInert();
   });
+
+  syncInert();
+  onLangChange(syncLabel);
+}
+
+/* ── Selector de idioma ── */
+export function initLangToggle() {
+  const button = $("#lang-toggle");
+
+  const paint = () => {
+    $$("[data-lang]", button).forEach((node) =>
+      node.classList.toggle("active", node.dataset.lang === getLang())
+    );
+  };
+
+  button.addEventListener("click", () => setLang(getLang() === "es" ? "en" : "es"));
+  onLangChange(paint);
+  paint();
 }
 
 /* ── Resalta el enlace de la sección visible ── */
@@ -72,9 +112,12 @@ export function initScrollSpy() {
     (entries) => {
       entries.forEach((entry) => {
         if (!entry.isIntersecting) return;
-        links.forEach((link) =>
-          link.classList.toggle("active", link.getAttribute("href") === `#${entry.target.id}`)
-        );
+        links.forEach((link) => {
+          const active = link.getAttribute("href") === `#${entry.target.id}`;
+          link.classList.toggle("active", active);
+          if (active) link.setAttribute("aria-current", "true");
+          else link.removeAttribute("aria-current");
+        });
       });
     },
     { rootMargin: "-45% 0px -50% 0px" }
@@ -93,7 +136,7 @@ export function initReveal() {
         obs.unobserve(entry.target);
       });
     },
-    { threshold: 0.12 }
+    { threshold: 0.08 }
   );
 
   $$(".reveal").forEach((node) => observer.observe(node));
@@ -127,8 +170,6 @@ function countUp(node) {
 }
 
 export function initCounters() {
-  const nodes = $$("[data-count]");
-
   if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
 
   const observer = new IntersectionObserver(
@@ -142,18 +183,24 @@ export function initCounters() {
     { threshold: 0.6 }
   );
 
-  nodes.forEach((node) => observer.observe(node));
+  $$("[data-count]:not([data-counted])").forEach((node) => {
+    node.dataset.counted = "";
+    observer.observe(node);
+  });
 }
 
 /* ── Efecto máquina de escribir en el hero ── */
 export function initTyping() {
   const target = $("#typed-role");
+  const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
   let roleIndex = 0;
   let charIndex = 0;
   let deleting = false;
+  let timer;
 
   const tick = () => {
-    const role = TYPED_ROLES[roleIndex];
+    const roles = t("hero.roles");
+    const role = roles[roleIndex % roles.length];
     charIndex += deleting ? -1 : 1;
     target.textContent = role.slice(0, charIndex);
 
@@ -164,12 +211,26 @@ export function initTyping() {
       delay = 2200;
     } else if (deleting && charIndex === 0) {
       deleting = false;
-      roleIndex = (roleIndex + 1) % TYPED_ROLES.length;
+      roleIndex = (roleIndex + 1) % roles.length;
       delay = 400;
     }
 
-    setTimeout(tick, delay);
+    timer = setTimeout(tick, delay);
   };
 
-  tick();
+  const start = () => {
+    clearTimeout(timer);
+    roleIndex = 0;
+    charIndex = 0;
+    deleting = false;
+    if (reduced) target.textContent = t("hero.roles")[0];
+    else tick();
+  };
+
+  onLangChange(start);
+  start();
+}
+
+export function initFooter() {
+  $("#footer-year").textContent = new Date().getFullYear();
 }

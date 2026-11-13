@@ -130,7 +130,13 @@
   }
 
   .stat {
-    padding: 16px 12px;
+    padding: 16px 12px 14px;
+  }
+
+  .stat-icon {
+    width: 34px;
+    height: 34px;
+    margin-bottom: 6px;
   }
 
   .stat-value {
@@ -218,6 +224,10 @@
 
   .about-text p {
     font-size: 0.95rem;
+  }
+
+  .about-text p:first-child {
+    font-size: 1rem;
   }
 
   .footer-inner {

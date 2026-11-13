@@ -1,0 +1,76 @@
+{
+  "id": "fraude-transaccional",
+  "title": "Transactional Fraud",
+  "category": "Multi-agent",
+  "status": "In development",
+  "region": "Azure AI Foundry · Container Apps",
+  "description": "Automated analysis of card fraud alerts. An agent weighs the evidence, determines the risk level and issues a verdict justified factor by factor.",
+  "problem": "Fraud alerts arrive in volume and require judgment, not just rules. The system prepares the case file in code and delegates the judgment to the agent, which must back every factor with the exact data point from the case so the analyst can verify it.",
+  "tech": ["Azure AI Foundry", "Azure Container Apps", "Cosmos DB", "Blob Storage", "Microsoft Entra ID", "FastAPI"],
+
+  "architecture": {
+    "caption": "Five layers: source and consumption, application service, analysis engine, data, and security with observability.",
+    "layers": [
+      {
+        "name": "Source and consumption",
+        "nodes": [
+          { "name": "External system", "detail": "Raw alert authenticated by API key", "kind": "external" },
+          { "name": "Analyst console", "detail": "Confirms, dismisses or escalates the alert", "kind": "user" }
+        ]
+      },
+      {
+        "name": "Application service",
+        "nodes": [
+          { "name": "Azure Container Apps", "detail": "Returns 202 and analyzes in the background", "kind": "compute" },
+          { "name": "Batch analysis", "detail": "Bulk reprocessing over cases in Blob", "kind": "compute" }
+        ]
+      },
+      {
+        "name": "Analysis engine",
+        "nodes": [
+          { "name": "Transaction engine", "detail": "Prepares case facts and indicators", "kind": "compute" },
+          { "name": "Azure AI Foundry", "detail": "Analyst agent: sets level and writes the verdict", "kind": "agent" }
+        ]
+      },
+      {
+        "name": "Data",
+        "nodes": [
+          { "name": "Azure Cosmos DB", "detail": "Case state and issued verdict", "kind": "data" },
+          { "name": "Azure Blob Storage", "detail": "JSON cases for batch analysis", "kind": "data" }
+        ]
+      },
+      {
+        "name": "Security and observability",
+        "transversal": true,
+        "nodes": [
+          { "name": "Microsoft Entra ID", "detail": "Protects console access", "kind": "security" },
+          { "name": "Managed identity", "detail": "Keyless access in configuration", "kind": "security" },
+          { "name": "Log Analytics", "detail": "Traces of every analysis run", "kind": "observability" }
+        ]
+      }
+    ]
+  },
+
+  "flow": [
+    "An external system sends the raw alert to the ingestion endpoint, authenticated with an API key. The service responds immediately without blocking the sender.",
+    "Analysis starts in the background: the transaction engine compares the operation against the spending profile and measures deviations in amount, channel and time.",
+    "The analyst agent, hosted on Azure AI Foundry, receives those facts and decides the risk level by weighing the evidence.",
+    "It issues the verdict: executive summary, risk factors with their exact data point, assigned level and recommendations.",
+    "The verdict is stored in Cosmos DB along with the case. The process is idempotent: if the verdict already exists, it is not reprocessed.",
+    "In parallel, the batch-analysis module reuses the same service to reprocess cases in Blob Storage unattended."
+  ],
+
+  "components": [
+    { "name": "Azure Container Apps", "role": "FastAPI alert service: ingestion, background analysis and console." },
+    { "name": "Azure AI Foundry", "role": "Hosts the analyst agent that decides the risk level and writes the verdict." },
+    { "name": "Transaction engine", "role": "Prepares the case facts and indicators consumed by the agent." },
+    { "name": "Azure Cosmos DB", "role": "Case state, transitions and issued verdict." },
+    { "name": "Azure Blob Storage", "role": "JSON cases feeding the batch analysis." },
+    { "name": "Microsoft Entra ID", "role": "Protects access to the batch-analysis console." }
+  ],
+
+  "insight": {
+    "title": "Splitting work between code and agent",
+    "text": "The code does not judge: it prepares the case file. The agent is the one that weighs the evidence and sets the risk level, reasoning over the combination of signals instead of adding up fixed points. Requiring justification makes the verdict reviewable: the analyst receives the full argument, not an opaque verdict."
+  }
+}

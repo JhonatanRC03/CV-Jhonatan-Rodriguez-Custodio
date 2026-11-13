@@ -13,7 +13,7 @@
   display: grid;
   place-items: center;
   padding: 24px;
-  background: rgba(4, 8, 16, 0.82);
+  background: var(--backdrop);
   backdrop-filter: blur(6px);
   opacity: 0;
   transition: opacity 0.28s var(--ease);
@@ -36,7 +36,7 @@
   background: var(--bg-elevated);
   border: 1px solid var(--border);
   border-radius: var(--radius-lg);
-  box-shadow: 0 32px 80px rgba(0, 0, 0, 0.6);
+  box-shadow: var(--shadow-lg);
   transform: translateY(18px) scale(0.98);
   transition: transform 0.32s var(--ease);
 }
@@ -107,13 +107,13 @@
 }
 
 .modal-status.live {
-  color: #10b981;
+  color: var(--success);
   background: rgba(16, 185, 129, 0.12);
   border-color: rgba(16, 185, 129, 0.32);
 }
 
 .modal-status.wip {
-  color: #f59e0b;
+  color: var(--warning);
   background: rgba(245, 158, 11, 0.12);
   border-color: rgba(245, 158, 11, 0.32);
 }
@@ -196,7 +196,7 @@
   font-family: var(--font-mono);
   font-size: 0.75rem;
   font-weight: 600;
-  color: #04121c;
+  color: var(--on-accent);
   background: var(--gradient);
   border-radius: 50%;
 }
@@ -259,11 +259,25 @@
 .modal-insight strong {
   display: block;
   font-size: 0.94rem;
-  color: #fff;
+  color: var(--heading);
   margin-bottom: 6px;
 }
 
 .modal-insight p {
   font-size: 0.9rem;
   color: var(--text-muted);
+}
+
+/* ── Acción final: continuar la conversación con la IA ── */
+.modal-actions {
+  display: flex;
+  justify-content: center;
+  margin-top: 34px;
+  padding-top: 26px;
+  border-top: 1px solid var(--border);
+}
+
+.ask-spark {
+  font-size: 1rem;
+  line-height: 1;
 }

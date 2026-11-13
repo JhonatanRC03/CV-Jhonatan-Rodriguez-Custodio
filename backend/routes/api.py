@@ -22,6 +22,38 @@ SECTIONS = (
     "mentoring",
 )
 
+MESSAGES = {
+    "es": {
+        "not_found": "Sección no encontrada",
+        "empty": "Escribe una pregunta.",
+        "too_long": "Máximo {n} caracteres.",
+        "limit": (
+            "Alcanzaste el límite de {n} preguntas. Podrás continuar en {h} h. "
+            "Mientras tanto, escríbele directamente."
+        ),
+        "unavailable": "El asistente no está disponible ahora.",
+    },
+    "en": {
+        "not_found": "Section not found",
+        "empty": "Please type a question.",
+        "too_long": "Maximum {n} characters.",
+        "limit": (
+            "You reached the limit of {n} questions. You can continue in {h} h. "
+            "In the meantime, feel free to contact him directly."
+        ),
+        "unavailable": "The assistant is not available right now.",
+    },
+}
+
+
+def _lang(payload=None):
+    raw = request.args.get("lang") or (payload or {}).get("lang")
+    return cv_service.normalize_lang(raw)
+
+
+def _msg(lang, key, **kwargs):
+    return MESSAGES[lang][key].format(**kwargs)
+
 
 def _sse(event, data):
     return f"event: {event}\ndata: {json.dumps(data, ensure_ascii=False)}\n\n"
@@ -31,10 +63,15 @@ def _identity():
     """Cuota por IP del visitante, almacenada como hash para no guardar la IP en claro."""
     ip = request.remote_addr or "unknown"
 
-    # Solo se confía en la cabecera del proxy si el despliegue lo declara explícitamente.
+    # Solo se confía en las cabeceras del proxy si el despliegue lo declara explícitamente.
+    # PythonAnywhere entrega la IP del visitante en X-Real-IP; sin esto, remote_addr
+    # es la del balanceador y todos los visitantes compartirían la misma cuota.
     if Config.TRUST_PROXY:
+        real_ip = request.headers.get("X-Real-IP", "").strip()
         forwarded = request.headers.get("X-Forwarded-For", "")
-        if forwarded:
+        if real_ip:
+            ip = real_ip
+        elif forwarded:
             ip = forwarded.split(",")[0].strip()
 
     return hashlib.sha256(ip.encode()).hexdigest()
@@ -42,14 +79,7 @@ def _identity():
 
 @api.get("/cv")
 def get_cv():
-    return jsonify(cv_service.load_cv())
-
-
-@api.get("/<section>")
-def get_section(section):
-    if section not in SECTIONS:
-        return jsonify({"error": "Sección no encontrada"}), 404
-    return jsonify(cv_service.get_section(section))
+    return jsonify(cv_service.load_cv(_lang()))
 
 
 @api.get("/chat/quota")
@@ -65,16 +95,25 @@ def chat_quota():
     )
 
 
+@api.get("/<section>")
+def get_section(section):
+    lang = _lang()
+    if section not in SECTIONS:
+        return jsonify({"error": _msg(lang, "not_found")}), 404
+    return jsonify(cv_service.get_section(section, lang))
+
+
 @api.post("/chat")
 def chat():
     payload = request.get_json(silent=True) or {}
+    lang = _lang(payload)
     message = str(payload.get("message", "")).strip()
 
     if not message:
-        return jsonify({"error": "Escribe una pregunta."}), 400
+        return jsonify({"error": _msg(lang, "empty")}), 400
 
     if len(message) > Config.CHAT_MAX_CHARS:
-        return jsonify({"error": f"Máximo {Config.CHAT_MAX_CHARS} caracteres."}), 400
+        return jsonify({"error": _msg(lang, "too_long", n=Config.CHAT_MAX_CHARS)}), 400
 
     identity = _identity()
     allowed, remaining, retry_after = rate_limiter.check(identity)
@@ -84,10 +123,7 @@ def chat():
         return (
             jsonify(
                 {
-                    "error": (
-                        f"Alcanzaste el límite de {Config.CHAT_MAX_QUESTIONS} preguntas. "
-                        f"Podrás continuar en {hours} h. Mientras tanto, escríbele directamente."
-                    ),
+                    "error": _msg(lang, "limit", n=Config.CHAT_MAX_QUESTIONS, h=hours),
                     "remaining": 0,
                     "retryAfter": retry_after,
                 }
@@ -105,7 +141,7 @@ def chat():
         charged = False
 
         try:
-            for kind, data in chat_service.stream_answer(message, history):
+            for kind, data in chat_service.stream_answer(message, history, lang):
                 if kind == "delta":
                     # Solo se cobra si el modelo respondió: un fallo no gasta cuota.
                     if not charged:
@@ -116,7 +152,7 @@ def chat():
                     yield _sse("usage", data or {})
         except Exception:
             log.exception("Fallo al consultar el modelo")
-            yield _sse("error", {"error": "El asistente no está disponible ahora."})
+            yield _sse("error", {"error": _msg(lang, "unavailable")})
             return
 
         yield _sse(

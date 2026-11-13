@@ -1,0 +1,231 @@
+{
+  "profile": {
+    "name": "Jhonatan Rodriguez Custodio",
+    "role": "AI Engineer | Azure & Generative AI",
+    "tagline": "I design multimodal RAG systems and multi-agent architectures in production.",
+    "summary": "Systems Engineer specialized in Artificial Intelligence, with 3 years of experience building end-to-end AI solutions in cloud environments. Expert in designing, implementing and deploying applications based on large language models (LLMs), multimodal RAG systems, MCP and multi-agent architectures.",
+    "summaryExtended": "I have solid experience in AI-oriented software development: building data pipelines, integrating OpenAI models, designing APIs and deploying to production on scalable architectures. I build intelligent solutions that automate complex processes by combining LLMs with enterprise data and agent orchestration, improving decision-making and operational efficiency.",
+    "location": "Peru",
+    "email": "jhonatan9494@gmail.com",
+    "phone": "(+51) 968677769",
+    "whatsapp": "51968677769",
+    "linkedin": "https://www.linkedin.com/in/jrc03/",
+    "github": "https://github.com/JhonatanRC03",
+    "photo": "assets/img/profile.jpg",
+    "stats": [
+      {
+        "value": "3+",
+        "label": "Years in applied AI",
+        "icon": "calendar"
+      },
+      {
+        "value": "7",
+        "label": "Microsoft certifications",
+        "icon": "award"
+      },
+      {
+        "value": "10+",
+        "label": "Systems in production",
+        "icon": "server"
+      },
+      {
+        "value": "3",
+        "label": "Hackathons as mentor",
+        "icon": "users"
+      }
+    ]
+  },
+  "experience": [
+    {
+      "company": "Gestión de Sistemas",
+      "location": "Peru",
+      "role": "AI Engineer",
+      "period": "Jan 2025 – Present",
+      "current": true,
+      "highlights": [
+        "Chat AVI — Document chatbot with multimodal RAG for querying institutional documentation: hybrid search and semantic ranker on Azure AI Search, answers with citations traceable to the source document (Azure OpenAI + GPT-4 Vision), extraction with Document Intelligence and a custom portal with JWT authentication on Cosmos DB.",
+        "Smart Recruiting — Automated CV analysis system using Document Intelligence, Azure AI Search and OpenAI models to extract candidate profiles, rank them semantically and make candidate selection more efficient.",
+        "Risk Agents — Multi-agent credit-risk system on Azure AI Foundry: an orchestrator splits the evaluation across agents for history, macro/sector context (web search grounding) and financial ratios (OpenAPI tools), consolidating a report with a rating and recommendation.",
+        "Corporate Credit Risk Agents — Code-driven orchestrator (Microsoft Agent Framework) coordinating six agents: financial, sector, prior reports, charts, report writer and validator, with tools via MCP, Azure AI Search, Document Intelligence and Cosmos DB, to generate the corporate-banking credit report exportable to Word and PowerPoint.",
+        "Document Processor — Serverless extraction of key attributes (Azure Functions + Document Intelligence + Azure OpenAI) from contracts, tax ID records, national IDs, promissory notes and AML/tax documents, with SFTP synchronization and signature validation.",
+        "Legal Powers Analyzer — Assistant for analyzing powers of attorney with a document-by-document pipeline that identifies attorneys-in-fact, powers, amount limits and validity, generating downloadable summaries for legal teams.",
+        "Document Knowledge — Enterprise knowledge-management platform on AKS, orchestrated with Semantic Kernel, semantic indexing and a decoupled architecture between batch ingestion and a low-latency conversational service.",
+        "Dispute Management Agents — Multi-agent dispute management system: six sequential agents (Azure AI Foundry Agent Framework) automating intake, 360° case view, evidence, regulatory research, communication and resolution, with mandatory Human-in-the-Loop before chargebacks.",
+        "Transactional Fraud — Analyst agent that weighs customer-behavior evidence and issues a risk verdict justified factor by factor for human review.",
+        "ArcGIS Analytics — Consulting and integration of AI-based land valuation using ArcGIS and Databricks to support data-driven strategic decisions."
+      ]
+    },
+    {
+      "company": "Shintek",
+      "location": "Spain",
+      "role": "Data Science and Analytics Jr",
+      "period": "Jul 2024 – Dec 2024",
+      "current": false,
+      "highlights": [
+        "Improved object-detection precision and efficiency by 20% using YOLO and transfer learning on images and video.",
+        "Interactive visualizations and dashboards with Seaborn and Matplotlib for data interpretation and tracking of key KPIs.",
+        "Exploratory analysis and data preparation for predictive models."
+      ]
+    }
+  ],
+  "skills": [
+    {
+      "category": "Programming Languages",
+      "icon": "code",
+      "items": ["Python", "SQL", "R", "Java", "JavaScript / TypeScript"]
+    },
+    {
+      "category": "Agentic AI and Orchestration",
+      "icon": "agents",
+      "items": [
+        "Model Context Protocol (MCP)",
+        "Microsoft Agent Framework",
+        "Semantic Kernel",
+        "Azure AI Foundry",
+        "Multi-agent architectures",
+        "Human-in-the-Loop"
+      ]
+    },
+    {
+      "category": "Generative AI and NLP",
+      "icon": "ai",
+      "items": [
+        "Hybrid RAG + semantic ranking",
+        "Azure OpenAI (GPT-4, embeddings)",
+        "OpenAI APIs",
+        "Prompt engineering",
+        "NLP"
+      ]
+    },
+    {
+      "category": "Frameworks and Development",
+      "icon": "stack",
+      "items": ["FastAPI", "Flask", "Quart", "React", "Angular"]
+    },
+    {
+      "category": "Computer Vision",
+      "icon": "vision",
+      "items": ["YOLOv8", "OpenCV", "TensorFlow", "Keras"]
+    },
+    {
+      "category": "Document Processing",
+      "icon": "doc",
+      "items": ["Azure AI Document Intelligence", "Content Understanding", "GPT Vision"]
+    },
+    {
+      "category": "Cloud Computing (Azure)",
+      "icon": "cloud",
+      "items": [
+        "Azure AI Foundry",
+        "Azure AI Search",
+        "App Service",
+        "Azure Functions",
+        "Container Apps",
+        "AKS",
+        "Logic Apps",
+        "Key Vault",
+        "Application Insights"
+      ]
+    },
+    {
+      "category": "Data and Visualization",
+      "icon": "data",
+      "items": ["Pandas", "NumPy", "Scikit-learn", "PySpark", "Power BI", "Matplotlib", "Seaborn", "ETL"]
+    },
+    {
+      "category": "Databases",
+      "icon": "db",
+      "items": ["MySQL", "SQL Server", "MongoDB", "PostgreSQL", "Cosmos DB"]
+    },
+    {
+      "category": "Version Control",
+      "icon": "git",
+      "items": ["Git", "GitHub"]
+    }
+  ],
+  "certifications": [
+    {
+      "code": "AI-103",
+      "name": "Developing AI Apps and Agents on Azure",
+      "level": "Associate",
+      "period": "Sep 2026",
+      "url": "https://learn.microsoft.com/api/credentials/share/es-es/JhonatanRodriguezCustodio-7265/D800CFD829806D6D?sharingId=741F47D64D5A545A"
+    },
+    {
+      "code": "AI-102",
+      "name": "Designing and Implementing a Microsoft Azure AI Solution",
+      "level": "Associate",
+      "period": "Mar 2025 – Jul 2025",
+      "url": "https://learn.microsoft.com/api/credentials/share/es-es/JhonatanRodriguezCustodio-7265/8AA0D450EA13F82D?sharingId=741F47D64D5A545A"
+    },
+    {
+      "code": "DP-100",
+      "name": "Designing and Implementing a Data Science Solution on Azure",
+      "level": "Associate",
+      "period": "Jan 2026 – Mar 2026",
+      "url": "https://learn.microsoft.com/api/credentials/share/es-es/JhonatanRodriguezCustodio-7265/1658F7EFBA648D3E?sharingId=741F47D64D5A545A"
+    },
+    {
+      "code": "AB-731",
+      "name": "AI Transformation Leader",
+      "level": "Professional",
+      "period": "Jun 2026 – Jul 2026",
+      "url": "https://learn.microsoft.com/api/credentials/share/es-es/JhonatanRodriguezCustodio-7265/96D3C54F9F20FAE5?sharingId=741F47D64D5A545A"
+    },
+    {
+      "code": "AB-730",
+      "name": "AI Business Professional",
+      "level": "Professional",
+      "period": "May 2026 – Jun 2026",
+      "url": "https://learn.microsoft.com/api/credentials/share/es-es/JhonatanRodriguezCustodio-7265/BA8640C8A29E6650?sharingId=741F47D64D5A545A"
+    },
+    {
+      "code": "AI-900",
+      "name": "Microsoft Azure AI Fundamentals",
+      "level": "Fundamentals",
+      "period": "Oct 2024 – Feb 2025",
+      "url": "https://learn.microsoft.com/api/credentials/share/es-es/JhonatanRodriguezCustodio-7265/4298E8369C4AE17A?sharingId=741F47D64D5A545A"
+    },
+    {
+      "code": "DP-900",
+      "name": "Microsoft Azure Data Fundamentals",
+      "level": "Fundamentals",
+      "period": "Mar 2026 – Apr 2026",
+      "url": "https://learn.microsoft.com/api/credentials/share/es-es/JhonatanRodriguezCustodio-7265/E334CB8251A8D2B8?sharingId=741F47D64D5A545A"
+    }
+  ],
+  "education": [
+    {
+      "institution": "Universidad Nacional Pedro Ruiz Gallo",
+      "degree": "Bachelor's degree in Systems Engineering",
+      "period": "Jul 2019 – Sep 2024"
+    },
+    {
+      "institution": "Alura Latam Academy (Brazil)",
+      "degree": "AI Engineer Certification",
+      "period": "Jan 2023 – Jan 2024"
+    },
+    {
+      "institution": "Bootcamp Experience",
+      "degree": "Data Analysis, AI & Machine Learning",
+      "period": "Jan 2024 – Jun 2024"
+    }
+  ],
+  "mentoring": [
+    {
+      "title": "Mentor — GenAI Hackathon Interbank",
+      "date": "November 2025",
+      "description": "Technical guidance to teams designing solutions with agents and RAG architectures."
+    },
+    {
+      "title": "Mentor — Bago Hackathon (Azure AI Foundry)",
+      "date": "June 2026",
+      "description": "Support in implementing generative AI solutions on Azure cloud services."
+    },
+    {
+      "title": "Azure AI Foundry Workshop — Habitat",
+      "date": "August 2026",
+      "description": "Training on RAG, agents, tools and the Azure AI Foundry workflow."
+    }
+  ]
+}

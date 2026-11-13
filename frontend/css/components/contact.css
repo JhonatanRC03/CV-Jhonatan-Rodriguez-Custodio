@@ -23,13 +23,13 @@
   margin-bottom: 14px;
   border-radius: 50%;
   color: var(--accent);
-  background: rgba(0, 242, 254, 0.08);
+  background: var(--accent-soft);
   border: 1px solid var(--border);
   transition: var(--transition);
 }
 
 .contact-card:hover .contact-icon {
-  color: #04121c;
+  color: var(--on-accent);
   background: var(--gradient);
   border-color: transparent;
   transform: scale(1.08);
@@ -56,16 +56,47 @@
 
 /* Verde de marca para el canal de WhatsApp */
 .contact-whatsapp .contact-icon {
-  color: #25d366;
+  color: var(--whatsapp);
   background: rgba(37, 211, 102, 0.1);
 }
 
-.contact-whatsapp:hover .contact-icon {
-  background: #25d366;
-  color: #04121c;
+.contact-whatsapp .contact-card:hover .contact-icon {
+  background: var(--whatsapp);
+  color: #fff;
 }
 
 .contact-whatsapp .contact-value {
-  color: #25d366;
+  color: var(--whatsapp);
+}
+
+/* ── Contenedor con acción secundaria (copiar email) ── */
+.contact-item {
+  position: relative;
+  display: flex;
+}
+
+.contact-item .contact-card {
+  flex: 1;
+}
+
+.contact-copy {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  display: grid;
+  place-items: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  border: 1px solid var(--border);
+  background: var(--bg-elevated);
+  color: var(--text-dim);
+  cursor: pointer;
+  transition: var(--transition);
+}
+
+.contact-copy:hover {
+  color: var(--accent);
+  border-color: var(--border-hover);
 }
 

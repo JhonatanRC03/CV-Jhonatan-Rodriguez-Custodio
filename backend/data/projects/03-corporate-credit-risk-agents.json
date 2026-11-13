@@ -1,0 +1,79 @@
+{
+  "id": "corporate-credit-risk-agents",
+  "title": "Corporate Credit Risk Agents",
+  "category": "Multiagente",
+  "status": "Producción",
+  "region": "Microsoft Foundry",
+  "description": "Un orquestador definido por código coordina seis agentes especializados (financiero, sectorial, informes previos, gráficos, redactor y validador) para producir el informe de riesgo crediticio de banca corporativa, exportable a Word y PowerPoint.",
+  "problem": "El informe de crédito corporativo combina estados financieros, contexto sectorial e historial de informes anteriores, y luego se redacta y presenta a comité. El sistema reparte ese trabajo entre agentes especializados y entrega un informe validado y listo para exportar, que el analista revisa en lugar de construir desde cero.",
+  "tech": ["Microsoft Foundry", "Agent Framework", "MCP", "Azure AI Search", "Document Intelligence", "Cosmos DB", "Azure OpenAI"],
+
+  "architecture": {
+    "caption": "Cinco capas: analista y aplicación, orquestación por código, agentes especializados, herramientas y conocimiento vía MCP, y datos.",
+    "layers": [
+      {
+        "name": "Analista y aplicación",
+        "nodes": [
+          { "name": "Analista de banca corporativa", "detail": "Solicita, revisa y exporta el informe", "kind": "user" },
+          { "name": "Exportación Word / PowerPoint", "detail": "Informe y presentación para comité", "kind": "integration" }
+        ]
+      },
+      {
+        "name": "Orquestación — Agent Framework",
+        "nodes": [
+          { "name": "Microsoft Foundry", "detail": "Modelos y registro de agentes", "kind": "ai" },
+          { "name": "Orquestador por código", "detail": "Define el orden y consolida resultados", "kind": "agent" }
+        ]
+      },
+      {
+        "name": "Agentes especializados",
+        "nodes": [
+          { "name": "Agente financiero", "detail": "Estados financieros y ratios", "kind": "agent" },
+          { "name": "Agente sectorial", "detail": "Contexto del sector y del mercado", "kind": "agent" },
+          { "name": "Agente de informes previos", "detail": "Historial de evaluaciones anteriores", "kind": "agent" },
+          { "name": "Agente de gráficos", "detail": "Visualizaciones para el informe", "kind": "agent" },
+          { "name": "Agente redactor", "detail": "Compone el informe de crédito", "kind": "agent" },
+          { "name": "Agente validador", "detail": "Revisa consistencia antes de entregar", "kind": "agent" }
+        ]
+      },
+      {
+        "name": "Herramientas y conocimiento",
+        "nodes": [
+          { "name": "Servidor MCP", "detail": "Expone las herramientas a los agentes", "kind": "integration" },
+          { "name": "Azure AI Search", "detail": "Recuperación sobre informes previos", "kind": "ai" },
+          { "name": "Document Intelligence", "detail": "Extracción de estados financieros", "kind": "ai" }
+        ]
+      },
+      {
+        "name": "Datos",
+        "transversal": true,
+        "nodes": [
+          { "name": "Azure Cosmos DB", "detail": "Estado de la evaluación y resultados por agente", "kind": "data" }
+        ]
+      }
+    ]
+  },
+
+  "flow": [
+    "El analista inicia la evaluación de un cliente corporativo. El orquestador, definido por código, fija qué agentes intervienen y en qué orden.",
+    "Document Intelligence extrae la información de los estados financieros y el agente financiero calcula ratios y tendencias.",
+    "El agente sectorial aporta el contexto del mercado y el agente de informes previos recupera evaluaciones anteriores desde Azure AI Search.",
+    "El agente de gráficos genera las visualizaciones que acompañan el análisis.",
+    "El agente redactor consolida todo en el informe de crédito y el agente validador comprueba su consistencia antes de entregarlo.",
+    "El informe se exporta a Word y PowerPoint para su revisión y presentación a comité."
+  ],
+
+  "components": [
+    { "name": "Microsoft Foundry", "role": "Modelos y agentes del sistema." },
+    { "name": "Agent Framework", "role": "Orquestación por código de los seis agentes." },
+    { "name": "Model Context Protocol (MCP)", "role": "Contrato estándar entre agentes y herramientas." },
+    { "name": "Azure AI Search", "role": "Recuperación de informes de crédito anteriores." },
+    { "name": "Document Intelligence", "role": "Extracción estructurada de estados financieros." },
+    { "name": "Azure Cosmos DB", "role": "Persistencia del estado de cada evaluación." }
+  ],
+
+  "insight": {
+    "title": "Orquestación por código, no por prompt",
+    "text": "El orden de los agentes lo decide el código, no el modelo. Eso hace el proceso predecible y auditable, y permite añadir un agente validador al final de la cadena: ningún informe llega al analista sin una revisión de consistencia."
+  }
+}

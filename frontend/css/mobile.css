@@ -16,6 +16,7 @@
   .card:hover,
   .stat:hover,
   .tag:hover,
+  .tag:hover .tech-ico,
   .hero-social a:hover,
   .contact-card:hover {
     transform: none;
@@ -43,7 +44,7 @@
   position: fixed;
   inset: 0;
   z-index: 998;
-  background: rgba(4, 8, 16, 0.72);
+  background: var(--backdrop);
   backdrop-filter: blur(3px);
   opacity: 0;
   transition: opacity 0.35s var(--ease);
@@ -57,14 +58,41 @@
   display: none;
 }
 
+/* Laptop estrecha: el menú completo no cabe con los números */
+@media (min-width: 861px) and (max-width: 1100px) {
+  .nav-links {
+    gap: 20px;
+  }
+
+  .nav-links em {
+    display: none;
+  }
+
+  .nav-actions {
+    margin-left: 16px;
+  }
+}
+
 @media (max-width: 860px) {
+  /* Idioma, tema y hamburguesa quedan por encima del drawer abierto */
+  .nav-actions {
+    position: relative;
+    z-index: 1100;
+    margin-left: auto;
+    gap: 6px;
+  }
+
   .nav-toggle {
     display: flex;
     width: var(--tap);
     height: var(--tap);
     align-items: center;
     justify-content: center;
-    z-index: 1100;
+  }
+
+  .icon-btn {
+    height: 40px;
+    min-width: 40px;
   }
 
   .nav-links {
@@ -74,11 +102,11 @@
     bottom: 0;
     z-index: 1050;
     width: min(300px, 80vw);
-    padding: calc(var(--safe-top) + 90px) 28px calc(var(--safe-bottom) + 28px);
+    padding: calc(var(--safe-top) + var(--header-h) + 22px) 28px calc(var(--safe-bottom) + 28px);
     padding-right: calc(28px + var(--safe-right));
     background: var(--bg-elevated);
     border-left: 1px solid var(--border);
-    box-shadow: -20px 0 60px rgba(0, 0, 0, 0.55);
+    box-shadow: var(--shadow-lg);
     flex-direction: column;
     justify-content: flex-start;
     align-items: stretch;
@@ -91,6 +119,18 @@
 
   .nav-links.open {
     transform: none;
+  }
+
+  /* El logo queda por encima del drawer: nunca se recorta al abrir el menú */
+  .logo {
+    position: relative;
+    z-index: 1100;
+  }
+
+  /* Con el menú abierto el chat no debe asomarse sobre el fondo oscuro */
+  body.nav-open .chat-launcher-wrap {
+    opacity: 0;
+    pointer-events: none;
   }
 
   .nav-links li {
@@ -122,6 +162,23 @@
     margin-top: 18px;
     border-bottom: none !important;
     padding: 12px 20px !important;
+  }
+}
+
+/* Teléfonos: un drawer de 300 px taparía el logo, así que el menú ocupa
+   toda la pantalla bajo la barra del header (logo, idioma, tema y cerrar). */
+@media (max-width: 480px) {
+  .nav-links {
+    width: 100%;
+    border-left: none;
+    box-shadow: none;
+    padding-left: calc(24px + var(--safe-left));
+    padding-right: calc(24px + var(--safe-right));
+  }
+
+  .nav-links a {
+    font-size: 1.08rem;
+    min-height: 52px;
   }
 }
 
@@ -481,5 +538,99 @@
   .nav-links {
     justify-content: flex-start;
     padding-top: calc(var(--safe-top) + 70px);
+  }
+}
+
+/* ═══════════════════════════════════════
+   8. CONTENIDO NUEVO EN MÓVIL
+   ═══════════════════════════════════════ */
+
+@media (max-width: 640px) {
+  .focus-grid {
+    grid-template-columns: 1fr;
+    gap: 10px;
+  }
+
+  .focus-item {
+    padding: 14px 16px;
+  }
+
+  .section-lead {
+    margin: -14px 0 24px;
+    font-size: 0.94rem;
+  }
+
+  /* Los filtros se desplazan en horizontal en vez de ocupar varias filas */
+  .filter-bar {
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    margin-inline: -18px;
+    padding: 2px 18px 6px;
+    scrollbar-width: none;
+  }
+
+  .filter-bar::-webkit-scrollbar {
+    display: none;
+  }
+
+  .filter-btn {
+    flex-shrink: 0;
+  }
+
+  .tech-marquee {
+    margin-inline: -18px;
+    margin-bottom: 24px;
+  }
+
+  .marquee-group {
+    gap: 28px;
+    padding-right: 28px;
+  }
+
+  .marquee-item {
+    font-size: 0.82rem;
+  }
+
+  .marquee-item img,
+  .marquee-item .tech-ico.mono {
+    width: 24px;
+    height: 24px;
+  }
+
+  .tag {
+    font-size: 0.8rem;
+    padding: 5px 11px 5px 7px;
+  }
+
+  .hero-status {
+    font-size: 0.74rem;
+    margin-bottom: 16px;
+  }
+
+  .modal-actions .btn {
+    width: 100%;
+  }
+
+  .toast {
+    bottom: calc(96px + var(--safe-bottom));
+  }
+
+  /* El lanzador del chat flota abajo a la derecha: el footer no debe quedar debajo */
+  footer {
+    padding-bottom: calc(96px + var(--safe-bottom));
+  }
+}
+
+@media (max-width: 400px) {
+  .nav-actions {
+    gap: 4px;
+  }
+
+  .lang-toggle {
+    padding: 0 7px;
+  }
+
+  .logo {
+    font-size: 1.25rem;
   }
 }

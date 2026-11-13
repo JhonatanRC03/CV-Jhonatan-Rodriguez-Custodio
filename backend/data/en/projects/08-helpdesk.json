@@ -1,0 +1,74 @@
+{
+  "id": "helpdesk",
+  "title": "Smart Helpdesk",
+  "category": "RAG / GenAI",
+  "status": "Production",
+  "region": "East US 2",
+  "description": "AI-assisted help desk that resolves support queries by retrieving indexed procedures and manuals, citing the document that backs each answer.",
+  "problem": "Support agents were checking scattered manuals to solve repetitive incidents. The help desk answers in natural language citing the exact procedure, reducing resolution time.",
+  "tech": ["Azure App Service", "Azure OpenAI", "Azure AI Search", "Document Intelligence", "Blob Storage", "Application Insights"],
+
+  "architecture": {
+    "caption": "Five layers: users, application, retrieval and generation, ingestion and data, and security with observability.",
+    "layers": [
+      {
+        "name": "Users and access",
+        "nodes": [
+          { "name": "Support agent", "detail": "Incident or operational query", "kind": "user" }
+        ]
+      },
+      {
+        "name": "Application layer",
+        "nodes": [
+          { "name": "Azure App Service", "detail": "RAG orchestration and web frontend", "kind": "compute" }
+        ]
+      },
+      {
+        "name": "Retrieval and generation (RAG)",
+        "nodes": [
+          { "name": "Azure AI Search", "detail": "Support knowledge index", "kind": "ai" },
+          { "name": "Azure OpenAI", "detail": "Chat and embeddings", "kind": "ai" }
+        ]
+      },
+      {
+        "name": "Ingestion and data",
+        "nodes": [
+          { "name": "Azure Blob Storage", "detail": "Manuals and procedures", "kind": "data" },
+          { "name": "Document Intelligence", "detail": "Extraction at ingestion", "kind": "ai" },
+          { "name": "Local parsers", "detail": "Low-cost ingestion alternative", "kind": "compute" }
+        ]
+      },
+      {
+        "name": "Security and observability",
+        "transversal": true,
+        "nodes": [
+          { "name": "Azure Key Vault", "detail": "Secrets and service keys", "kind": "security" },
+          { "name": "Application Insights", "detail": "Query telemetry", "kind": "observability" },
+          { "name": "Log Analytics", "detail": "Centralized logs", "kind": "observability" }
+        ]
+      }
+    ]
+  },
+
+  "flow": [
+    "The agent asks a support question in natural language through a direct-access application.",
+    "The App Service backend builds the pipeline, embeds the query and runs a hybrid search over the knowledge index.",
+    "The semantic ranker re-orders the results and selects the passages most likely to resolve the incident.",
+    "Azure OpenAI writes the answer relying only on those passages, citing the corresponding procedure.",
+    "The knowledge base is fed by uploading documents to Blob Storage; Document Intelligence processes them and the content is embedded and indexed."
+  ],
+
+  "components": [
+    { "name": "Azure App Service", "role": "RAG orchestration and help desk frontend." },
+    { "name": "Azure OpenAI", "role": "Chat model and embedding model." },
+    { "name": "Azure AI Search", "role": "Support knowledge index with semantic re-ranking." },
+    { "name": "Document Intelligence", "role": "Content extraction during document ingestion." },
+    { "name": "Azure Blob Storage", "role": "Repository of manuals, procedures and attachments." },
+    { "name": "Application Insights", "role": "Telemetry, latency and errors." }
+  ],
+
+  "insight": {
+    "title": "Accelerator reuse",
+    "text": "It shares platform and RAG pattern with the document chatbot: it is the same accelerator deployed twice. What sets them apart is the indexed corpus and the system prompt tuning, not the architecture — which shows the value of a reusable foundation."
+  }
+}

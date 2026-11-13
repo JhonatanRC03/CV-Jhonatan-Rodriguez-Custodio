@@ -1,5 +1,6 @@
 import { getChatQuota, streamChat } from "./api.js";
-import { CHAT_GREETING, CHAT_HISTORY_TURNS, CHAT_SUGGESTIONS } from "./config.js";
+import { CHAT_HISTORY_TURNS } from "./config.js";
+import { getLang, onLangChange, t } from "./i18n.js";
 import { $, el, isMobile, lockScroll } from "./utils.js";
 
 const history = [];
@@ -7,6 +8,7 @@ let remaining = null;
 let limit = null;
 let busy = false;
 let asked = false;
+let greeting = null;
 
 const win = () => $("#chat-window");
 
@@ -18,8 +20,10 @@ function scrollToEnd(force = false) {
 }
 
 function pushMessage(text, author) {
-  win().append(el("div", `msg msg-${author}`, text));
+  const node = el("div", `msg msg-${author}`, text);
+  win().append(node);
   scrollToEnd(true);
+  return node;
 }
 
 function showTyping() {
@@ -59,11 +63,10 @@ function createStreamBubble() {
 
 function buildMeta({ model, usage, latency }) {
   const meta = el("div", "msg-meta");
-  meta.append(el("span", "meta-model", model));
+  if (model) meta.append(el("span", "meta-model", model));
 
   if (usage?.output) {
-    const tokens = el("span", null, `${usage.output.toLocaleString("es")} tokens`);
-    meta.append(tokens);
+    meta.append(el("span", null, `${usage.output.toLocaleString(getLang())} tokens`));
   }
 
   if (latency) meta.append(el("span", null, `${latency.toFixed(1)} s`));
@@ -76,7 +79,7 @@ function renderQuota() {
   if (remaining === null) return;
 
   badge.textContent = limit ? `${remaining}/${limit}` : String(remaining);
-  badge.title = `${remaining} ${remaining === 1 ? "pregunta restante" : "preguntas restantes"}`;
+  badge.title = t("chat.remaining", remaining);
   badge.classList.toggle("depleted", remaining === 0);
 }
 
@@ -88,9 +91,9 @@ function syncInputState() {
   input.disabled = busy || depleted;
   $("#chat-form").querySelector("button").disabled = busy || depleted;
 
-  if (depleted) input.placeholder = "Límite alcanzado — vuelve en 24 h";
-  else if (busy) input.placeholder = "Generando respuesta...";
-  else input.placeholder = "Hazme una pregunta...";
+  if (depleted) input.placeholder = t("chat.placeholderDepleted");
+  else if (busy) input.placeholder = t("chat.placeholderBusy");
+  else input.placeholder = t("chat.placeholder");
 }
 
 function renderSuggestions() {
@@ -99,7 +102,7 @@ function renderSuggestions() {
 
   if (asked || remaining === 0) return;
 
-  CHAT_SUGGESTIONS.forEach((text) => {
+  t("chat.suggestions").forEach((text) => {
     const btn = el("button", "suggestion", text);
     btn.type = "button";
     btn.addEventListener("click", () => ask(text));
@@ -155,18 +158,23 @@ async function ask(question) {
   } catch (error) {
     typing.remove();
     bubble?.remove();
-    pushMessage(
-      error.data?.error || "No pude conectar con el asistente. Intenta de nuevo en un momento.",
-      "bot"
-    );
+    pushMessage(error.data?.error || t("chat.connectionError"), "bot");
     if (error.status === 429) remaining = 0;
   } finally {
     busy = false;
     renderQuota();
     renderSuggestions();
     syncInputState();
-    if (remaining !== 0) $("#chat-message").focus();
+    if (remaining !== 0 && !isMobile()) $("#chat-message").focus();
   }
+}
+
+let openWidget = () => {};
+
+/** Abre el asistente y, si se indica, lanza una pregunta directamente. */
+export function openChat(question) {
+  openWidget();
+  if (question) ask(question);
 }
 
 export function initChat() {
@@ -176,8 +184,9 @@ export function initChat() {
   const form = $("#chat-form");
   const input = $("#chat-message");
 
-  pushMessage(CHAT_GREETING, "bot");
+  greeting = pushMessage(t("chat.greeting"), "bot");
   renderSuggestions();
+  syncInputState();
 
   getChatQuota()
     .then((quota) => {
@@ -190,7 +199,7 @@ export function initChat() {
     })
     .catch(() => {});
 
-  const open = () => {
+  openWidget = () => {
     widget.hidden = false;
     launcher.classList.add("hidden");
     // Como hoja inferior ocupa la pantalla: el fondo no debe desplazarse.
@@ -207,8 +216,8 @@ export function initChat() {
     lockScroll("chat", false);
   };
 
-  $("#chat-launcher-btn").addEventListener("click", open);
-  invite.addEventListener("click", open);
+  $("#chat-launcher-btn").addEventListener("click", openWidget);
+  invite.addEventListener("click", openWidget);
 
   $("#chat-invite-close").addEventListener("click", (e) => {
     e.stopPropagation();
@@ -232,5 +241,13 @@ export function initChat() {
     if (!question) return;
     input.value = "";
     ask(question);
+  });
+
+  // La conversación ya escrita se conserva; solo cambian los textos de la interfaz.
+  onLangChange(() => {
+    if (greeting) greeting.textContent = t("chat.greeting");
+    renderQuota();
+    renderSuggestions();
+    syncInputState();
   });
 }

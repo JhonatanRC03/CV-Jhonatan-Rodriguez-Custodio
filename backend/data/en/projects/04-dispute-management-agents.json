@@ -1,0 +1,81 @@
+{
+  "id": "dispute-management-agents",
+  "title": "Dispute Management Agents",
+  "category": "Multi-agent",
+  "status": "Production",
+  "region": "East US 2",
+  "description": "Card dispute management with six sequential agents on Azure AI Foundry Hosted Agents, with mandatory human approval before irreversible actions.",
+  "problem": "A dispute's lifecycle involves classification, evidence gathering, regulatory checks, communication and resolution. The chain automates all six steps but halts chargebacks and final closure behind an explicit human approval gate.",
+  "tech": ["Azure AI Foundry", "Hosted Agents", "Agent Framework", "Azure OpenAI", "Container Apps", "Policy RAG", "Human-in-the-Loop"],
+
+  "architecture": {
+    "caption": "Five layers: operations console, hosted agent in Foundry, six-agent chain, business integrations, and governance with data.",
+    "layers": [
+      {
+        "name": "Operations console",
+        "nodes": [
+          { "name": "Dispute operator", "detail": "Reviews cases and approves actions", "kind": "user" },
+          { "name": "Azure Container Apps", "detail": "Operations console environment", "kind": "compute" }
+        ]
+      },
+      {
+        "name": "Hosted Agent — Azure AI Foundry",
+        "nodes": [
+          { "name": "Azure AI Foundry", "detail": "dispute-management-agents project", "kind": "ai" },
+          { "name": "Agent Framework", "detail": "WorkflowBuilder · ResponsesHostServer", "kind": "agent" }
+        ]
+      },
+      {
+        "name": "Agent chain",
+        "nodes": [
+          { "name": "Intake", "detail": "Claim intake and classification", "kind": "agent" },
+          { "name": "Case", "detail": "360° case: customer, account and card", "kind": "agent" },
+          { "name": "Data", "detail": "Evidence: merchant, transaction and fraud", "kind": "agent" },
+          { "name": "Investigation", "detail": "Policies (RAG) and HITL flag", "kind": "agent" },
+          { "name": "Communication", "detail": "Customer notice and provisional credit", "kind": "agent" },
+          { "name": "Resolution", "detail": "Chargeback and final closure", "kind": "agent" }
+        ]
+      },
+      {
+        "name": "Business integrations",
+        "nodes": [
+          { "name": "CRM and Card Management", "detail": "Customer, account, card and transaction", "kind": "external" },
+          { "name": "Merchants and fraud", "detail": "Evidence and risk score", "kind": "external" }
+        ]
+      },
+      {
+        "name": "Governance and data",
+        "transversal": true,
+        "nodes": [
+          { "name": "Azure Cosmos DB", "detail": "Case state and traceability", "kind": "data" },
+          { "name": "Azure Blob Storage", "detail": "Case artifacts and data", "kind": "data" },
+          { "name": "Container Registry", "detail": "Private console image", "kind": "compute" },
+          { "name": "Log Analytics", "detail": "Environment logs and workflow traces", "kind": "observability" }
+        ]
+      }
+    ]
+  },
+
+  "flow": [
+    "The operator registers or reviews the claim in the operations console published on Azure Container Apps.",
+    "The case enters the Hosted Agent of the Foundry project, built with Agent Framework and published through ResponsesHostServer.",
+    "The chain runs sequentially: Intake classifies, Case builds the customer's 360° view and Data gathers transaction and merchant evidence.",
+    "Each agent queries business systems through function tools: CRM, card management, merchant data and the fraud engine.",
+    "Investigation checks the case against regulations via RAG and sets hitl_required if the fraud score exceeds 75, the amount exceeds USD 1,500 or confidence drops below 0.70.",
+    "Communication notifies the customer and handles provisional credit; Resolution executes the chargeback, both after human approval."
+  ],
+
+  "components": [
+    { "name": "Azure AI Foundry", "role": "Project hosting the six-agent workflow." },
+    { "name": "Azure Container Apps", "role": "Dispute management operations console." },
+    { "name": "Container Registry", "role": "Private registry for the console image." },
+    { "name": "Azure Cosmos DB", "role": "State and traceability of processed cases." },
+    { "name": "Azure Blob Storage", "role": "Case artifacts and data." },
+    { "name": "Log Analytics", "role": "Environment logs and workflow traces." }
+  ],
+
+  "insight": {
+    "title": "Human-in-the-Loop enforced by the platform",
+    "text": "The chargeback and final-resolution tools are declared with approval_mode=\"always_require\": it is the Foundry runtime that pauses execution and demands approval. The guarantee does not depend on the prompt or on the model's discipline, but on the platform."
+  }
+}

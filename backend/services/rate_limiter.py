@@ -21,7 +21,12 @@ def check(identity):
 
     with _lock:
         hits = _prune(_usage.get(identity, []), now)
-        _usage[identity] = hits
+        # Sin preguntas en la ventana no hay nada que recordar: evita que el
+        # diccionario crezca con cada visitante que solo abre la página.
+        if hits:
+            _usage[identity] = hits
+        else:
+            _usage.pop(identity, None)
 
     remaining = Config.CHAT_MAX_QUESTIONS - len(hits)
 

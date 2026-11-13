@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <defs>
+    <linearGradient id="dot" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#00f2fe"/>
+      <stop offset="1" stop-color="#4facfe"/>
+    </linearGradient>
+  </defs>
+  <rect width="64" height="64" rx="15" fill="#0b1220"/>
+  <rect x="1" y="1" width="62" height="62" rx="14" fill="none" stroke="#00f2fe" stroke-opacity=".35" stroke-width="2"/>
+  <!-- "J" trazada (no depende de fuentes instaladas) -->
+  <path d="M36 14v23a10 10 0 0 1-20 0" fill="none" stroke="#ffffff" stroke-width="9" stroke-linecap="round"/>
+  <!-- El punto cian del logo "JRC." -->
+  <circle cx="47.5" cy="46" r="5.5" fill="url(#dot)"/>
+</svg>

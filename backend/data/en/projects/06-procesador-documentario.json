@@ -1,0 +1,70 @@
+{
+  "id": "procesador-documentario",
+  "title": "Document Processor",
+  "category": "Document AI",
+  "status": "Production",
+  "region": "East US 2",
+  "description": "Serverless accelerator that automates ingestion, validation and extraction over document files, with SFTP synchronization and signature validation.",
+  "problem": "Document processing is an irregular workload: large batch peaks followed by idle time. Keeping the logic in Functions makes consumption follow real volume instead of a plan sized for the peak.",
+  "tech": ["Azure Functions", "Azure App Service", "Document Intelligence", "Azure OpenAI", "Logic Apps", "Blob Storage"],
+
+  "architecture": {
+    "caption": "Four layers: input, frontend and serverless compute, AI processing and orchestration, and storage with security.",
+    "layers": [
+      {
+        "name": "Input",
+        "nodes": [
+          { "name": "Operator", "detail": "Uploads batches and reviews results", "kind": "user" },
+          { "name": "SFTP server", "detail": "Case files and configuration files", "kind": "external" }
+        ]
+      },
+      {
+        "name": "Frontend and serverless compute",
+        "nodes": [
+          { "name": "Azure App Service", "detail": "Vite frontend · UI only", "kind": "compute" },
+          { "name": "Azure Functions", "detail": "Python v4 · 8 HTTP endpoints", "kind": "compute" }
+        ]
+      },
+      {
+        "name": "AI processing and orchestration",
+        "nodes": [
+          { "name": "Document Intelligence", "detail": "Text, table and field extraction", "kind": "ai" },
+          { "name": "Azure OpenAI", "detail": "Chat model + vision model", "kind": "ai" },
+          { "name": "Azure Logic Apps", "detail": "Downstream integration and notification", "kind": "compute" }
+        ]
+      },
+      {
+        "name": "Storage and security",
+        "transversal": true,
+        "nodes": [
+          { "name": "Azure Blob Storage", "detail": "Documents, results and prompts", "kind": "data" },
+          { "name": "Azure Key Vault", "detail": "AI service keys", "kind": "security" },
+          { "name": "Application Insights", "detail": "Telemetry for every run", "kind": "observability" }
+        ]
+      }
+    ]
+  },
+
+  "flow": [
+    "The operator opens the Vite frontend on App Service, which only renders the UI and delegates every operation to the Function App.",
+    "The function syncs configuration files from SFTP — customization, naming rules and allowed paths — into Blob Storage.",
+    "Before processing, each file's naming is validated against the current rules and its path must be enabled. Anything non-compliant never enters the pipeline.",
+    "Document Intelligence applies OCR and returns text, tables and fields with their position; Azure OpenAI interprets the content according to the detected type.",
+    "A separate vision deployment handles hard scans and signature validation.",
+    "Documents, results and prompts are stored in Blob Storage, so behavior can be tuned without redeploying."
+  ],
+
+  "components": [
+    { "name": "Azure Functions", "role": "Python v4 with 8 endpoints: SFTP sync, validation, processing and signatures." },
+    { "name": "Azure App Service", "role": "Vite frontend: upload and review interface." },
+    { "name": "Document Intelligence", "role": "Extraction of text, tables and structured fields." },
+    { "name": "Azure OpenAI", "role": "Analysis and classification, with an additional vision deployment." },
+    { "name": "Azure Logic Apps", "role": "Integration and notification after processing." },
+    { "name": "Azure Blob Storage", "role": "Documents, results and prompt templates." }
+  ],
+
+  "insight": {
+    "title": "Credentials kept out of the browser",
+    "text": "The frontend never talks to the AI services: it only knows the Function App URL and key. That keeps the Azure OpenAI and Document Intelligence credentials off the client. It recognizes contracts, schedules, tax ID records, national IDs, promissory notes, sworn statements, AML (SPLAFT) and tax documents."
+  }
+}

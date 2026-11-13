@@ -1,0 +1,79 @@
+{
+  "id": "corporate-credit-risk-agents",
+  "title": "Corporate Credit Risk Agents",
+  "category": "Multi-agent",
+  "status": "Production",
+  "region": "Microsoft Foundry",
+  "description": "A code-driven orchestrator coordinates six specialist agents (financial, sector, prior reports, charts, report writer and validator) to produce a corporate-banking credit report, exportable to Word and PowerPoint.",
+  "problem": "A corporate credit report combines financial statements, sector context and the history of prior reports, and then has to be written up and presented to a committee. The system splits that work across specialist agents and delivers a validated, export-ready report that the analyst reviews instead of building from scratch.",
+  "tech": ["Microsoft Foundry", "Agent Framework", "MCP", "Azure AI Search", "Document Intelligence", "Cosmos DB", "Azure OpenAI"],
+
+  "architecture": {
+    "caption": "Five layers: analyst and application, code-driven orchestration, specialist agents, tools and knowledge via MCP, and data.",
+    "layers": [
+      {
+        "name": "Analyst and application",
+        "nodes": [
+          { "name": "Corporate banking analyst", "detail": "Requests, reviews and exports the report", "kind": "user" },
+          { "name": "Word / PowerPoint export", "detail": "Report and committee presentation", "kind": "integration" }
+        ]
+      },
+      {
+        "name": "Orchestration — Agent Framework",
+        "nodes": [
+          { "name": "Microsoft Foundry", "detail": "Models and agent registry", "kind": "ai" },
+          { "name": "Code-driven orchestrator", "detail": "Sets the order and consolidates results", "kind": "agent" }
+        ]
+      },
+      {
+        "name": "Specialist agents",
+        "nodes": [
+          { "name": "Financial agent", "detail": "Financial statements and ratios", "kind": "agent" },
+          { "name": "Sector agent", "detail": "Sector and market context", "kind": "agent" },
+          { "name": "Prior-reports agent", "detail": "History of previous evaluations", "kind": "agent" },
+          { "name": "Charts agent", "detail": "Visuals for the report", "kind": "agent" },
+          { "name": "Report writer agent", "detail": "Composes the credit report", "kind": "agent" },
+          { "name": "Validator agent", "detail": "Checks consistency before delivery", "kind": "agent" }
+        ]
+      },
+      {
+        "name": "Tools and knowledge",
+        "nodes": [
+          { "name": "MCP server", "detail": "Exposes tools to the agents", "kind": "integration" },
+          { "name": "Azure AI Search", "detail": "Retrieval over prior reports", "kind": "ai" },
+          { "name": "Document Intelligence", "detail": "Financial statement extraction", "kind": "ai" }
+        ]
+      },
+      {
+        "name": "Data",
+        "transversal": true,
+        "nodes": [
+          { "name": "Azure Cosmos DB", "detail": "Evaluation state and per-agent results", "kind": "data" }
+        ]
+      }
+    ]
+  },
+
+  "flow": [
+    "The analyst starts the evaluation of a corporate client. The code-driven orchestrator decides which agents take part and in what order.",
+    "Document Intelligence extracts the financial statements and the financial agent computes ratios and trends.",
+    "The sector agent adds market context and the prior-reports agent retrieves previous evaluations from Azure AI Search.",
+    "The charts agent generates the visuals that accompany the analysis.",
+    "The report writer consolidates everything into the credit report and the validator agent checks its consistency before delivery.",
+    "The report is exported to Word and PowerPoint for review and committee presentation."
+  ],
+
+  "components": [
+    { "name": "Microsoft Foundry", "role": "Models and agents of the system." },
+    { "name": "Agent Framework", "role": "Code-driven orchestration of the six agents." },
+    { "name": "Model Context Protocol (MCP)", "role": "Standard contract between agents and tools." },
+    { "name": "Azure AI Search", "role": "Retrieval of previous credit reports." },
+    { "name": "Document Intelligence", "role": "Structured extraction of financial statements." },
+    { "name": "Azure Cosmos DB", "role": "Persistence of each evaluation's state." }
+  ],
+
+  "insight": {
+    "title": "Orchestrated by code, not by prompt",
+    "text": "The agent order is decided by code, not by the model. That makes the process predictable and auditable, and allows a validator agent at the end of the chain: no report reaches the analyst without a consistency check."
+  }
+}

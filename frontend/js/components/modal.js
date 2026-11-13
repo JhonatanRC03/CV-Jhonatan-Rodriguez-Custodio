@@ -35,7 +35,7 @@ export function createModal({ overlay, panel, closeButton, body }) {
     }
   };
 
-  const close = () => {
+  const close = ({ restoreFocus = true } = {}) => {
     if (!isOpen()) return;
 
     overlay.classList.remove("visible");
@@ -45,7 +45,7 @@ export function createModal({ overlay, panel, closeButton, body }) {
     setTimeout(() => {
       overlay.hidden = true;
       body.replaceChildren();
-      previouslyFocused?.focus();
+      if (restoreFocus) previouslyFocused?.focus({ preventScroll: true });
     }, 260);
   };
 
@@ -66,7 +66,7 @@ export function createModal({ overlay, panel, closeButton, body }) {
     lockScroll("modal", true);
   };
 
-  closeButton.addEventListener("click", close);
+  closeButton.addEventListener("click", () => close());
 
   overlay.addEventListener("click", (e) => {
     if (e.target === overlay) close();

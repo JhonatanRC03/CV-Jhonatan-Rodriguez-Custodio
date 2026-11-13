@@ -1,0 +1,67 @@
+{
+  "id": "poderes-legales",
+  "title": "Legal Powers Analyzer",
+  "category": "Document AI",
+  "status": "Production",
+  "region": "East US 2",
+  "description": "Document-by-document extraction and analysis pipeline that identifies attorneys-in-fact, powers, amount limits and validity in legal powers of attorney.",
+  "problem": "Reviewing a power-of-attorney deed means reading the whole document to find who can sign, up to what amount and until when. The assistant extracts those four facts and generates a downloadable Word summary for the legal team.",
+  "tech": ["Azure App Service", "Azure OpenAI", "Document Intelligence", "Blob Storage", "Key Vault", "Streamlit"],
+
+  "architecture": {
+    "caption": "Four-layer pipeline: input, application and storage, AI processing, and a cross-cutting security and observability layer.",
+    "layers": [
+      {
+        "name": "Input",
+        "nodes": [
+          { "name": "Legal team", "detail": "Uploads the deed and defines the query", "kind": "user" },
+          { "name": "Power-of-attorney document", "detail": "PDF · DOCX · scanned image", "kind": "external" }
+        ]
+      },
+      {
+        "name": "Application and storage",
+        "nodes": [
+          { "name": "Azure App Service", "detail": "Containerized Streamlit app", "kind": "compute" },
+          { "name": "Azure Blob Storage", "detail": "Documents and prompt configuration", "kind": "data" }
+        ]
+      },
+      {
+        "name": "AI processing",
+        "nodes": [
+          { "name": "Document Intelligence", "detail": "Text, tables and deed structure", "kind": "ai" },
+          { "name": "Azure OpenAI", "detail": "Classification, summary and extraction", "kind": "ai" }
+        ]
+      },
+      {
+        "name": "Security and observability",
+        "transversal": true,
+        "nodes": [
+          { "name": "Azure Key Vault", "detail": "OpenAI, Storage and DI secrets", "kind": "security" },
+          { "name": "Application Insights", "detail": "Document processing traces", "kind": "observability" }
+        ]
+      }
+    ]
+  },
+
+  "flow": [
+    "The legal team opens the Streamlit app hosted on App Service and selects the case or branch to work on.",
+    "The document is stored in Blob Storage, which also holds configuration and prompt templates.",
+    "Document Intelligence processes the file and returns text, tables and structure, even on scanned deeds.",
+    "Azure OpenAI applies the use-case prompt: identifies attorneys-in-fact, powers, amount limits and validity.",
+    "The result goes back to the app for review and download as a Word report, with the original kept in Blob Storage as backup."
+  ],
+
+  "components": [
+    { "name": "Azure App Service", "role": "Containerized Streamlit application." },
+    { "name": "Document Intelligence", "role": "Text and structure extraction from the legal document." },
+    { "name": "Azure OpenAI", "role": "Classification, summary and extraction of powers." },
+    { "name": "Azure Blob Storage", "role": "Documents, templates and externalized configuration." },
+    { "name": "Azure Key Vault", "role": "Custody of AI service and Storage keys." },
+    { "name": "Application Insights", "role": "Pipeline traceability and error diagnostics." }
+  ],
+
+  "insight": {
+    "title": "No search index, on purpose",
+    "text": "It uses neither Azure AI Search nor Cosmos DB: each document is processed in isolation against Document Intelligence and Azure OpenAI. It is a deliberate difference from the conversational assistants, and the reason for a noticeably smaller service footprint."
+  }
+}

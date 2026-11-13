@@ -12,15 +12,17 @@
   --kind-user: #64748b;
   --kind-compute: var(--accent-2);
   --kind-ai: var(--accent);
-  --kind-data: #10b981;
-  --kind-security: #f59e0b;
+  --kind-data: var(--success);
+  --kind-security: var(--warning);
   --kind-observability: var(--accent-3);
   --kind-integration: #ec4899;
+  --kind-agent: #a855f7;
+  --kind-external: #94a3b8;
 
   padding: 22px 20px;
   background:
-    linear-gradient(rgba(255, 255, 255, 0.015) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(255, 255, 255, 0.015) 1px, transparent 1px),
+    linear-gradient(var(--grid-line) 1px, transparent 1px),
+    linear-gradient(90deg, var(--grid-line) 1px, transparent 1px),
     var(--bg-card);
   background-size: 28px 28px, 28px 28px, auto;
   border: 1px solid var(--border);
@@ -45,7 +47,7 @@
   padding: 14px 16px 16px;
   border: 1px solid var(--border);
   border-radius: var(--radius);
-  background: rgba(255, 255, 255, 0.018);
+  background: var(--surface-tint-2);
 }
 
 /* Banda transversal: servicios que atienden a todas las capas */
@@ -83,7 +85,7 @@
 .diagram-node:hover {
   transform: translateY(-2px);
   border-color: var(--border-hover);
-  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.35);
+  box-shadow: var(--shadow-sm);
 }
 
 .diagram-node-name {
@@ -136,6 +138,21 @@
 .diagram-node[data-kind="integration"],
 .legend-dot[data-kind="integration"] {
   --node-color: var(--kind-integration);
+}
+
+.diagram-node[data-kind="agent"],
+.legend-dot[data-kind="agent"] {
+  --node-color: var(--kind-agent);
+}
+
+.diagram-node[data-kind="external"],
+.legend-dot[data-kind="external"] {
+  --node-color: var(--kind-external);
+}
+
+/* Los agentes se distinguen también por forma, no solo por color */
+.diagram-node[data-kind="agent"] {
+  background: linear-gradient(135deg, rgba(168, 85, 247, 0.08), transparent 70%), var(--bg-elevated);
 }
 
 /* ── Leyenda ── */

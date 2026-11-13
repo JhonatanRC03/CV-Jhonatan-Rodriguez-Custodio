@@ -26,6 +26,9 @@ token a token y control de consumo.
 | **Control de consumo** | 5 preguntas cada 24 h por IP, en ventana deslizante, para acotar el gasto de tokens |
 | **Modales de arquitectura** | Cada proyecto muestra su diagrama por capas, flujo y servicios utilizados |
 | **Contenido dirigido por datos** | Agregar un proyecto es añadir un JSON: cero cambios en el frontend |
+| **Bilingüe (ES / EN)** | Interfaz, CV, proyectos y respuestas del asistente en español o inglés |
+| **Stack con logos** | Logos de [Devicon](https://devicon.dev) (MIT) y OpenAI de [Simple Icons](https://simpleicons.org) (CC0), alojados en `frontend/assets/icons/tech/`. Para añadir uno: suelta el SVG ahí y agrega una regla en `frontend/js/tech-icons.js` |
+| **Tema claro y oscuro** | Sigue la preferencia del sistema y recuerda la elección del visitante |
 | **Responsive real** | Drawer lateral, bottom sheet, safe areas y objetivos táctiles de 44 px |
 | **Sin dependencias de UI** | JavaScript nativo con módulos ES6. Sin framework ni paso de build |
 
@@ -155,14 +158,25 @@ CORS_ORIGINS=*
 ### 3. Levantar los servicios
 
 ```bash
-# Terminal 1 — API
 cd backend && python app.py
-
-# Terminal 2 — Frontend
-cd frontend && python3 -m http.server 8080
 ```
 
-Abre <http://localhost:8080>.
+Abre <http://localhost:5000>. Flask sirve el frontend y la API desde el mismo origen,
+así que no hace falta un segundo servidor ni configurar `API_URL`.
+
+---
+
+### Pruebas
+
+```bash
+cd backend
+pip install -r requirements-dev.txt
+python -m pytest
+```
+
+Validan la API en ambos idiomas, que cada proyecto tenga su traducción con el mismo `id`,
+los tipos de nodo de los diagramas, las reglas del chat y las cabeceras de caché.
+No llaman al modelo, así que no consumen tokens.
 
 ---
 
@@ -170,10 +184,10 @@ Abre <http://localhost:8080>.
 
 | Método | Ruta | Descripción |
 |---|---|---|
-| `GET` | `/api/cv` | CV completo con proyectos y arquitecturas |
-| `GET` | `/api/<sección>` | Sección concreta (`profile`, `experience`, `skills`, `projects`…) |
+| `GET` | `/api/cv?lang=es\|en` | CV completo con proyectos y arquitecturas, en el idioma pedido |
+| `GET` | `/api/<sección>?lang=es\|en` | Sección concreta (`profile`, `experience`, `skills`, `projects`…) |
 | `GET` | `/api/chat/quota` | Preguntas restantes y modelo activo |
-| `POST` | `/api/chat` | Respuesta del asistente como `text/event-stream` |
+| `POST` | `/api/chat` | Respuesta del asistente como `text/event-stream`. Body: `{ message, history, lang }` |
 
 ### Eventos del stream
 
@@ -224,11 +238,19 @@ Crea un archivo en `backend/data/projects/` siguiendo el orden numérico.
 Los campos `architecture`, `flow`, `components` e `insight` son opcionales: si faltan,
 su sección simplemente no se pinta.
 
+### Versión en inglés
+
+Las traducciones viven en `backend/data/en/` con la misma estructura:
+`data/en/cv.json` y `data/en/projects/<mismo-nombre>.json`. Si falta la traducción de
+un proyecto, se muestra el original en español: nunca desaparece de la web.
+
+Los textos fijos de la interfaz (menú, botones, títulos) están en `frontend/js/i18n.js`.
+
 ### Tipos de nodo (`kind`)
 
 Determinan el color en el diagrama:
 
-`user` · `compute` · `ai` · `data` · `security` · `observability` · `integration`
+`user` · `compute` · `ai` · `agent` · `data` · `security` · `observability` · `integration` · `external`
 
 ---
 
@@ -264,12 +286,20 @@ Un fallo del servicio no consume preguntas del visitante.
 
 ## Despliegue
 
-**Frontend** → Azure Static Web Apps, Netlify, Vercel o GitHub Pages.
-Actualiza `API_URL` en `frontend/js/config.js` con la URL pública de tu API.
+**PythonAnywhere (actual)** → una sola web app Flask sirve frontend y API.
+`frontend/js/config.js` usa `/api` relativo, así que no hay que editarlo en el servidor.
 
-**Backend** → PythonAnywhere, Azure App Service o Container Apps.
-Define las variables de entorno en el panel del proveedor y restringe `CORS_ORIGINS`
-al dominio de tu frontend.
+1. `git pull` y pulsa **Reload** en la pestaña *Web*.
+2. En la pestaña *Web → Static files*, **elimina los mapeos de `/css` y `/js`** (puedes
+   dejar `/assets`). PythonAnywhere los sirve sin `Cache-Control`, y tras un despliegue
+   el navegador puede mezclar el HTML nuevo con JS/CSS viejos. Flask ya los sirve con
+   revalidación (`no-cache` + ETag → respuesta 304, sin coste extra).
+3. Añade `TRUST_PROXY=1` al `.env` del servidor. En PythonAnywhere la IP que ve Flask es
+   la del balanceador; con esta opción se usa la del visitante (`X-Real-IP`) y cada uno
+   tiene su propia cuota del chat.
+
+**Frontend separado** (Static Web Apps, Netlify…) → cambia `API_URL` en
+`frontend/js/config.js` por la URL pública de la API y restringe `CORS_ORIGINS`.
 
 > El limitador vive en memoria: se reinicia con el proceso y no se comparte entre
 > instancias. Para escalado horizontal, moverlo a Redis o Cosmos DB.

@@ -6,7 +6,9 @@
  * Añadir un proyecto = añadir un JSON. Añadir un tipo de sección = una entrada aquí.
  */
 
-import { el, withLeadEmphasis } from "../utils.js";
+import { openChat } from "../chat.js";
+import { t } from "../i18n.js";
+import { el, isLive, withLeadEmphasis } from "../utils.js";
 import { buildDiagram } from "./diagram.js";
 
 /* ── Renderizadores por tipo de dato ── */
@@ -48,11 +50,11 @@ function renderTech(tech) {
 /* ── Declaración de secciones (el orden aquí es el orden visual) ── */
 
 const SECTIONS = [
-  { key: "problem", title: "Problema que resuelve", render: renderParagraph },
-  { key: "architecture", title: "Arquitectura", render: buildDiagram },
-  { key: "flow", title: "Flujo de la solución", render: renderFlow },
-  { key: "components", title: "Servicios utilizados", render: renderComponents },
-  { key: "tech", title: "Stack", render: renderTech },
+  { key: "problem", title: "modal.problem", render: renderParagraph },
+  { key: "architecture", title: "modal.architecture", render: buildDiagram },
+  { key: "flow", title: "modal.flow", render: renderFlow },
+  { key: "components", title: "modal.components", render: renderComponents },
+  { key: "tech", title: "modal.tech", render: renderTech },
 ];
 
 const hasContent = (value) =>
@@ -60,7 +62,7 @@ const hasContent = (value) =>
 
 function wrapSection(title, content) {
   const section = el("section", "modal-section");
-  section.append(el("h4", "modal-section-title", title), content);
+  section.append(el("h4", "modal-section-title", t(title)), content);
   return section;
 }
 
@@ -73,8 +75,7 @@ function buildHeader(project) {
   meta.append(el("span", "project-category", project.category));
 
   if (project.status) {
-    const live = project.status.toLowerCase().startsWith("produc");
-    meta.append(el("span", `modal-status ${live ? "live" : "wip"}`, project.status));
+    meta.append(el("span", `modal-status ${isLive(project.status) ? "live" : "wip"}`, project.status));
   }
 
   if (project.region) meta.append(el("span", "modal-region", project.region));
@@ -92,8 +93,20 @@ function buildInsight({ title, text }) {
   return note;
 }
 
+/** Lleva la conversación al asistente con el proyecto como tema. */
+function buildAskButton(project, onAsk) {
+  const btn = el("button", "btn btn-ai modal-ask");
+  btn.type = "button";
+  btn.append(el("span", "ask-spark", "✦"), el("span", null, t("modal.askAI")));
+  btn.addEventListener("click", () => {
+    onAsk?.();
+    openChat(t("modal.askPrompt", project.title));
+  });
+  return btn;
+}
+
 /** Construye el contenido completo del modal para un proyecto. */
-export function buildProjectDetail(project) {
+export function buildProjectDetail(project, { onAsk } = {}) {
   const fragment = document.createDocumentFragment();
 
   fragment.append(buildHeader(project));
@@ -103,6 +116,10 @@ export function buildProjectDetail(project) {
   );
 
   if (project.insight) fragment.append(buildInsight(project.insight));
+
+  const actions = el("div", "modal-actions");
+  actions.append(buildAskButton(project, onAsk));
+  fragment.append(actions);
 
   return fragment;
 }

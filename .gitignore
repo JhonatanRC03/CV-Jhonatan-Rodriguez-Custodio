@@ -10,3 +10,6 @@ venv/
 
 # Dependencias frontend (si agregas npm más adelante)
 node_modules/
+
+# Pruebas
+.pytest_cache/

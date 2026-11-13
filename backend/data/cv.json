@@ -15,19 +15,23 @@
     "stats": [
       {
         "value": "3+",
-        "label": "Años en IA aplicada"
+        "label": "Años en IA aplicada",
+        "icon": "calendar"
       },
       {
         "value": "7",
-        "label": "Certificaciones Microsoft"
+        "label": "Certificaciones Microsoft",
+        "icon": "award"
       },
       {
         "value": "10+",
-        "label": "Sistemas en producción"
+        "label": "Sistemas en producción",
+        "icon": "server"
       },
       {
         "value": "3",
-        "label": "Hackatones como mentor"
+        "label": "Hackatones como mentor",
+        "icon": "users"
       }
     ]
   },
@@ -42,6 +46,7 @@
         "Chat AVI — Chatbot documentario con RAG multimodal para consulta de documentación institucional: búsqueda híbrida y semantic ranker sobre Azure AI Search, respuestas con citas trazables al documento fuente (Azure OpenAI + GPT-4 Vision), extracción con Document Intelligence y portal propio con autenticación JWT sobre Cosmos DB.",
         "Reclutamiento Inteligente — Sistema de análisis automatizado de CVs aplicando Document Intelligence, Azure AI Search y modelos de OpenAI para extraer perfiles, rankearlos semánticamente y mejorar la eficiencia en la selección de candidatos.",
         "Risk Agents — Sistema multiagente de riesgo crediticio sobre Azure AI Foundry: un orquestador reparte la evaluación entre agentes de historial, entorno macro/sectorial (web search grounding) y ratios financieros (herramientas OpenAPI), consolidando informe con calificación y recomendación.",
+        "Corporate Credit Risk Agents — Orquestador definido por código (Microsoft Agent Framework) que coordina seis agentes: financiero, sectorial, informes previos, gráficos, redactor y validador, con herramientas vía MCP, Azure AI Search, Document Intelligence y Cosmos DB, para generar el informe de crédito de banca corporativa exportable a Word y PowerPoint.",
         "Procesador Documentario — Extracción serverless de atributos clave (Azure Functions + Document Intelligence + Azure OpenAI) en contratos, fichas RUC, DNI, pagarés y documentos SPLAFT/tributarios, con sincronización SFTP y validación de firmas.",
         "Poderes Legales — Asistente de análisis de poderes con pipeline documento a documento para identificar apoderados, facultades, montos límite y vigencia, generando resúmenes descargables para equipos legales.",
         "Document Knowledge — Plataforma de gestión del conocimiento empresarial sobre AKS, orquestación vía Semantic Kernel, indexación semántica y arquitectura desacoplada entre ingesta batch y servicio conversacional de baja latencia.",

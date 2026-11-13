@@ -1,0 +1,12 @@
+{
+  "name": "Jhonatan Rodriguez Custodio | AI Engineer",
+  "short_name": "JRC",
+  "icons": [
+    { "src": "icon-512.png", "sizes": "512x512", "type": "image/png" },
+    { "src": "apple-touch-icon.png", "sizes": "180x180", "type": "image/png" }
+  ],
+  "start_url": "/",
+  "display": "browser",
+  "background_color": "#070b14",
+  "theme_color": "#070b14"
+}

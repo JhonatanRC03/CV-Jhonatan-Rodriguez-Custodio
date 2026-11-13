@@ -1,4 +1,5 @@
 import { API_URL } from "./config.js";
+import { getLang } from "./i18n.js";
 
 async function request(path, options = {}) {
   const res = await fetch(`${API_URL}${path}`, {
@@ -9,13 +10,13 @@ async function request(path, options = {}) {
   const data = await res.json().catch(() => ({}));
 
   if (!res.ok) {
-    throw Object.assign(new Error(data.error || "Error de red"), { status: res.status, data });
+    throw Object.assign(new Error(data.error || "Network error"), { status: res.status, data });
   }
 
   return data;
 }
 
-export const getCV = () => request("/cv");
+export const getCV = (lang = getLang()) => request(`/cv?lang=${lang}`);
 
 export const getChatQuota = () => request("/chat/quota");
 
@@ -27,12 +28,12 @@ export async function streamChat(message, history, on) {
   const res = await fetch(`${API_URL}/chat`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ message, history }),
+    body: JSON.stringify({ message, history, lang: getLang() }),
   });
 
   if (!res.ok) {
     const data = await res.json().catch(() => ({}));
-    throw Object.assign(new Error(data.error || "Error de red"), { status: res.status, data });
+    throw Object.assign(new Error(data.error || "Network error"), { status: res.status, data });
   }
 
   const reader = res.body.getReader();
