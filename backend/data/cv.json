@@ -6,7 +6,7 @@
     "summary": "Ingeniero de Sistemas especializado en Inteligencia Artificial, con 3 años de experiencia desarrollando soluciones de IA end-to-end en entornos cloud. Experto en el diseño, implementación y despliegue de aplicaciones basadas en modelos de lenguaje (LLMs), sistemas RAG multimodales, MCP y arquitecturas multiagente.",
     "summaryExtended": "Cuento con sólida experiencia en desarrollo de software orientado a IA: construcción de pipelines de datos, integración de modelos de OpenAI, diseño de APIs y despliegue en producción bajo arquitecturas escalables. Desarrollo soluciones inteligentes que automatizan procesos complejos mediante la integración de LLMs con datos empresariales y la orquestación de agentes, mejorando la toma de decisiones y la eficiencia operativa.",
     "location": "Perú",
-    "email": "jhonatan9494c@gmail.com",
+    "email": "jhonatan9494@gmail.com",
     "phone": "(+51) 968677769",
     "whatsapp": "51968677769",
     "linkedin": "https://www.linkedin.com/in/jrc03/",
@@ -18,7 +18,7 @@
         "label": "Años en IA aplicada"
       },
       {
-        "value": "6",
+        "value": "7",
         "label": "Certificaciones Microsoft"
       },
       {
@@ -178,6 +178,13 @@
     }
   ],
   "certifications": [
+    {
+      "code": "AI-103",
+      "name": "Developing AI Apps and Agents on Azure",
+      "level": "Associate",
+      "period": "Sep 2026",
+      "url": "https://learn.microsoft.com/api/credentials/share/es-es/JhonatanRodriguezCustodio-7265/D800CFD829806D6D?sharingId=741F47D64D5A545A"
+    },
     {
       "code": "AI-102",
       "name": "Designing and Implementing a Microsoft Azure AI Solution",

@@ -280,14 +280,14 @@ al dominio de tu frontend.
 
 **Jhonatan Rodriguez Custodio** — AI Engineer
 
-[![Email](https://img.shields.io/badge/Email-jhonatan9494c@gmail.com-EA4335?logo=gmail&logoColor=white)](mailto:jhonatan9494c@gmail.com)
+[![Email](https://img.shields.io/badge/Email-jhonatan9494@gmail.com-EA4335?logo=gmail&logoColor=white)](mailto:jhonatan9494@gmail.com)
 [![LinkedIn](https://img.shields.io/badge/LinkedIn-jrc03-0A66C2?logo=linkedin&logoColor=white)](https://www.linkedin.com/in/jrc03/)
 [![GitHub](https://img.shields.io/badge/GitHub-JhonatanRC03-181717?logo=github&logoColor=white)](https://github.com/JhonatanRC03)
 [![WhatsApp](https://img.shields.io/badge/WhatsApp-+51%20968677769-25D366?logo=whatsapp&logoColor=white)](https://wa.me/51968677769)
 
 ### Certificaciones Microsoft
 
-`AI-102` · `DP-100` · `AB-731` · `AB-730` · `AI-900` · `DP-900`
+`AI-103` · `AI-102` · `DP-100` · `AB-731` · `AB-730` · `AI-900` · `DP-900`
 
 ---
 
