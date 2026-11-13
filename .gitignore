@@ -13,3 +13,6 @@ node_modules/
 
 # Pruebas
 .pytest_cache/
+
+# Configuración local de Claude Code (no se versiona)
+.claude/

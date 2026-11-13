@@ -1,0 +1,8 @@
+# Fin de línea LF en todo el repositorio, sin importar el sistema ni el git
+# que se use (Windows, WSL o el servidor Linux de PythonAnywhere).
+* text=auto eol=lf
+
+# Binarios: nunca se convierten
+*.png binary
+*.jpg binary
+*.ico binary
